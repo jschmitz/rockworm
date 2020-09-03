@@ -1,3 +1,4 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  post "/calls", to: "calls#create"
+  post "/get_digits", to: "calls#get_digits"
 end
