@@ -4,5 +4,5 @@ Rails.application.routes.draw do
 
   post "/calls", to: "calls#create"
   post "/get_digits", to: "calls#get_digits"
-  get "/workout_logs", to: "workout_logs#show"
+  get "/workout_logs", to: "workout_logs#index"
 end

@@ -1,0 +1,17 @@
+<h1>Listing Workouts</h1>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Intensity</th>
+    <th>Notes</th>
+  </tr>
+
+  <% @workout_logs.each do |wl| %>
+    <tr>
+      <td><%= wl.workout_date %></td>
+      <td><%= wl.intensity %></td>
+      <td><%= wl.notes %></td>
+    </tr>
+  <% end %>
+</table>
