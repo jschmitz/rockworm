@@ -9,7 +9,7 @@
 
   <% @workout_logs.each do |wl| %>
     <tr>
-      <td><%= wl.workout_date %></td>
+      <td><%= wl.workout_date.strftime("%A, %-m/%-d/%y") if wl.workout_date %></td>
       <td><%= wl.intensity %></td>
       <td><%= wl.notes %></td>
     </tr>
