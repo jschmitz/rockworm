@@ -54,4 +54,5 @@ end
 gem 'tzinfo-data'
 
 gem 'freeclimb'
+gem 'google-cloud-speech'
 
