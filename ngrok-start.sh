@@ -24,7 +24,7 @@ end tell
 END
 
 # wait for ngrok to start before curl
-sleep 2
+sleep 5
 
 # get current subdomain url
 NGROK_URL=$(curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"https:..([^"]*).*/\1/p'
@@ -47,7 +47,7 @@ echo $'\n'
 
 echo $"Update FreeClimb Application urls"$'\n'
 # Update freeclimb via curl with the new subdomain
-curl -s -X POST -d "{\"voiceUrl\":\"$new_public_url/inbound_calls\", \"callConnectUrl\":\"$new_public_url/calls\", \"smsUrl\":\"$new_public_url/inbound_messages\"}" -u $FC_ACCOUNT_ID:$FC_ACCOUNT_TOKEN https://freeclimb.com/apiserver/Accounts/$FC_ACCOUNT_ID/Applications/$ROCKWORM_APPLICATION_ID
+curl -s -X POST -d "{\"voiceUrl\":\"$new_public_url/calls\", \"callConnectUrl\":\"$new_public_url/calls\", \"smsUrl\":\"$new_public_url/messages\"}" -u $FC_ACCOUNT_ID:$FC_ACCOUNT_TOKEN https://freeclimb.com/apiserver/Accounts/$FC_ACCOUNT_ID/Applications/$ROCKWORM_APPLICATION_ID
 echo $'\n'"Completed updating FreeClimb Applications Application Urls"
 
 echo $'\n\n'"Script completed"
