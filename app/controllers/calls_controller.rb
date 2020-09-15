@@ -128,5 +128,8 @@ class CallsController < ApplicationController
     end
 
     temp_file.delete
+  rescue Exception => e
+    puts "The controller had an error" + e.message
+    puts "The controller had an error" + e.backtrace.inspect
   end
 end
