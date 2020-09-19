@@ -4,6 +4,7 @@
   <tr>
     <th>Date</th>
     <th>Intensity</th>
+    <th>Category</th>
     <th>Notes</th>
   </tr>
 
@@ -11,6 +12,7 @@
     <tr>
       <td><%= wl.workout_date.strftime("%A, %-m/%-d/%y") if wl.workout_date %></td>
       <td><%= wl.intensity %></td>
+      <td><%= wl.category %></td>
       <td><%= wl.notes %></td>
     </tr>
   <% end %>

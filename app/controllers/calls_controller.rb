@@ -1,5 +1,6 @@
 require "freeclimb"
 require "google/cloud/speech"
+require "nokogiri"
 
 class CallsController < ApplicationController
   skip_before_action :verify_authenticity_token
@@ -83,16 +84,75 @@ class CallsController < ApplicationController
     # TODO - This will work for one user only. Must change for multi users.
     wl = WorkoutLog.last
     wl.update!(recording_id: params[:recordingId])
-
-    say = Freeclimb::Say.new(text: "Thank you and have a great day Jake")
-    percl_script = Freeclimb::PerclScript.new(commands: [say])
-
     speech_to_text(params[:recordingId])
+
+    say = Freeclimb::Say.new(text: "What category of workout did you get in?")
+
+    puts "#{ENV["ROCKWORM_PUBLIC_URL"]}/grammar_file"
+    puts "#{ENV["ROCKWORM_PUBLIC_URL"]}"
+
+    getSpeech = Freeclimb::GetSpeech.new(action_url: "#{ENV["ROCKWORM_PUBLIC_URL"]}/category_select", grammar_file: "#{ENV["ROCKWORM_PUBLIC_URL"]}/grammar_file", grammar_type: "URL")
+
+    percl_script = Freeclimb::PerclScript.new(commands: [say, getSpeech])
 
     render json: Freeclimb::percl_to_json(percl_script)
   rescue Exception => e
     puts "The controller had an error" + e.message
     puts "The controller had an error" + e.backtrace.inspect
+  end
+
+  #  GetSpeech webhook
+  #  {
+  #    "accountId": "AC5a947e6afd4f9436917e6f212dc475c485f945c6",
+  #    "callId": "CA9c02e079ad131f5c4ca0b059c499a6687e10b34c",
+  #    "callStatus": "inProgress",
+  #    "conferenceId": null,
+  #    "confidence": 96,
+  #    "direction": "inbound",
+  #    "from": "+13128541346",
+  #    "parentCallId": null,
+  #    "privacyMode": false,
+  #    "queueId": null,
+  #    "reason": "recognition",
+  #    "recognitionResult": "yoga",
+  #    "requestType": "getSpeech",
+  #    "to": "+13123798952"
+  # }
+  def category_select
+    if (params["reason"] == "recognition")
+      category = params["recognitionResult"]
+      say = Freeclimb::Say.new(text: "Selected category was #{category}. Thank you have a great day, work out again")
+      wl = WorkoutLog.last
+      wl.update!(category: category)
+    else
+      say = Freeclimb::Say.new(text: "There was an error selecting a category. Go and enter it manually.")
+    end
+
+    percl_script = Freeclimb::PerclScript.new(commands: [say])
+
+    render json: Freeclimb::percl_to_json(percl_script)
+  rescue Exception => e
+    puts "The controller had an error" + e.message
+    puts "The controller had an error" + e.backtrace.inspect
+  end
+
+  def grammar_file
+    xml_str = <<EOF
+<grammar xmlns:sapi="http://schemas.microsoft.com/Speech/2002/06/SRGSExtensions" xml:lang="EN-US" tag-format="semantics-ms/1.0" version="1.0" root="workout_category" mode="voice" xmlns="http://www.w3.org/2001/06/grammar" sapi:alphabet="x-microsoft-ups">
+  <rule id="workout_category" scope="public">
+    <one-of>
+      <item><tag>$._value = "yoga"</tag>yoga</item>
+      <item><tag>$._value = "boxing"</tag>boxing</item>
+      <item><tag>$._value = "functional"</tag>functional</item>
+      <item><tag>$._value = "cardio"</tag>cardio</item>
+      <item><tag>$._value = "mobility"</tag>mobility</item>
+    </one-of>
+  </rule>
+</grammar>
+EOF
+
+    doc = Nokogiri::XML(xml_str)
+    send_data doc, filename: "workout_categories.xml"
   end
 
   def speech_to_text(recording_id)
