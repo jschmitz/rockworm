@@ -21,7 +21,7 @@ class CallsController < ApplicationController
   #    "to": "+13128541346"
   #  }
   def create
-    say = Freeclimb::Say.new(text: "Hello, Jake, tell me about your exercising. Did you get a work out today? One for Yes, Two for No")
+    say = Freeclimb::Say.new(text: "Hello, Jake, tell me about your exercising. Did you get a work out today? Tell me how intense from zero to ten with 10 being the highest intensity.")
     get_digits = Freeclimb::GetDigits.new(action_url: "#{ENV["ROCKWORM_PUBLIC_URL"]}/get_digits", prompts: [say])
     percl_script = Freeclimb::PerclScript.new(commands: [get_digits])
 
@@ -51,8 +51,6 @@ class CallsController < ApplicationController
     say = Freeclimb::Say.new(text: "Tell me more about your workout.")
     rc = Freeclimb::RecordUtterance.new(action_url: "#{ENV["ROCKWORM_PUBLIC_URL"]}/record_utterance")
     percl_script = Freeclimb::PerclScript.new(commands: [say, rc])
-
-    wl = WorkoutLog.create!(workout_date: Time.now, intensity: params["digits"])
 
     render json: Freeclimb::percl_to_json(percl_script)
   rescue Exception => e
@@ -146,6 +144,7 @@ class CallsController < ApplicationController
       <item><tag>$._value = "functional"</tag>functional</item>
       <item><tag>$._value = "cardio"</tag>cardio</item>
       <item><tag>$._value = "mobility"</tag>mobility</item>
+      <item><tag>$._value = "other"</tag>mobility</item>
     </one-of>
   </rule>
 </grammar>
