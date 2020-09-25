@@ -44,6 +44,46 @@ export function paint() {
   //Read the data
   d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
 
+
+    // create a tooltip
+    var tooltip = d3.select("#my_dataviz")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
+      .style("display", "none")
+
+
+    // Three function that change the tooltip when user hover / move / leave a cell
+    var mouseover = function(d) {
+
+      console.log(d)
+
+      console.log(d.screenX)
+
+      tooltip.style("opacity", 1)
+      .style("display", "inline")
+      .style("position", "absolute")
+    }
+
+    var mousemove = function(d) {
+      tooltip
+        .html("The exact value of<br>this cell is: " + data[0].value)
+        .style("left", (d.screenX + 20) + "px")
+        .style("top", (d.screenY - 100) + "px")
+        //.style("left", (d3.mouse(this)[0]+70) + "px")
+        //.style("top", (d3.mouse(this)[1]) + "px")
+    }
+
+    var mouseleave = function(d) {
+      tooltip.style("opacity", 0)
+    }
+
+
     data = [data]
     svg.selectAll()
         .data(data, function(d) { return d.group+':'+d.variable; })
@@ -54,6 +94,9 @@ export function paint() {
         .attr("width", x.bandwidth() )
         .attr("height", y.bandwidth() )
         .style("fill", function(d) { return myColor(d.value)} )
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
   })
 }
 
