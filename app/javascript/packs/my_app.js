@@ -2,7 +2,7 @@ import * as d3 from "d3"
 
 export function paint() {
   // set the dimensions and margins of the graph
-  var margin = {top: 30, right: 30, bottom: 30, left: 30},
+  var margin = {top: 30, right: 30, bottom: 30, left: 70},
     width = 450 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
@@ -15,14 +15,15 @@ export function paint() {
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+
   // Labels of row and columns
-  var myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-  var myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"]
+  var weeksOfYear = ["34", "35", "36", "37", "38"]
+  var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
   // Build X scales and axis:
   var x = d3.scaleBand()
     .range([ 0, width ])
-    .domain(myGroups)
+    .domain(weeksOfYear)
     .padding(0.01);
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -31,7 +32,7 @@ export function paint() {
   // Build X scales and axis:
   var y = d3.scaleBand()
     .range([ height, 0 ])
-    .domain(myVars)
+    .domain(daysOfWeek)
     .padding(0.01);
   svg.append("g")
     .call(d3.axisLeft(y));
@@ -39,65 +40,64 @@ export function paint() {
   // Build color scale
   var myColor = d3.scaleLinear()
     .range(["white", "#69b3a2"])
-    .domain([1,100])
+    .domain([1,10])
 
   //Read the data
-  d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
+  d3.json("/workout_logs.json")
+    .then(function(data) {
+
+      for(let i = 0; i < data.length; i++){
+
+        // create a tooltip
+        var tooltip = d3.select("#my_dataviz")
+          .append("div")
+          .style("opacity", 0)
+          .attr("class", "tooltip")
+          .style("background-color", "white")
+          .style("border", "solid")
+          .style("border-width", "2px")
+          .style("border-radius", "5px")
+          .style("padding", "5px")
+          .style("display", "none")
 
 
-    // create a tooltip
-    var tooltip = d3.select("#my_dataviz")
-      .append("div")
-      .style("opacity", 0)
-      .attr("class", "tooltip")
-      .style("background-color", "white")
-      .style("border", "solid")
-      .style("border-width", "2px")
-      .style("border-radius", "5px")
-      .style("padding", "5px")
-      .style("display", "none")
+        // Three function that change the tooltip when user hover / move / leave a cell
+        var mouseover = function(d) {
+          tooltip.style("opacity", 1)
+          .style("display", "inline")
+          .style("position", "absolute")
+        }
 
+        var mousemove = function(d) {
+          tooltip
+            .html("The exact value of<br>this cell is: " + data[i].notes)
+            .style("left", (d.screenX + 20) + "px")
+            .style("top", (d.screenY - 120) + "px")
+        }
 
-    // Three function that change the tooltip when user hover / move / leave a cell
-    var mouseover = function(d) {
+        var mouseleave = function(d) {
+          tooltip.style("opacity", 0)
+        }
 
-      console.log(d)
+        let workout = [data[i]]
+        svg.selectAll()
+            .data(workout, function(d) { return d.week_of_year+':'+d.day_of_week; })
+            .enter()
+            .append("rect")
+            .attr("x", function(d) { return x(d.week_of_year) })
+            .attr("y", function(d) { return y(d.day_of_week) })
+            .attr("width", x.bandwidth() )
+            .attr("height", y.bandwidth() )
+            .style("fill", function(d) { return myColor(d.intensity)} )
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
+      }
 
-      console.log(d.screenX)
-
-      tooltip.style("opacity", 1)
-      .style("display", "inline")
-      .style("position", "absolute")
-    }
-
-    var mousemove = function(d) {
-      tooltip
-        .html("The exact value of<br>this cell is: " + data[0].value)
-        .style("left", (d.screenX + 20) + "px")
-        .style("top", (d.screenY - 100) + "px")
-        //.style("left", (d3.mouse(this)[0]+70) + "px")
-        //.style("top", (d3.mouse(this)[1]) + "px")
-    }
-
-    var mouseleave = function(d) {
-      tooltip.style("opacity", 0)
-    }
-
-
-    data = [data]
-    svg.selectAll()
-        .data(data, function(d) { return d.group+':'+d.variable; })
-        .enter()
-        .append("rect")
-        .attr("x", function(d) { return x(d.group) })
-        .attr("y", function(d) { return y(d.variable) })
-        .attr("width", x.bandwidth() )
-        .attr("height", y.bandwidth() )
-        .style("fill", function(d) { return myColor(d.value)} )
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
-  })
+      })
+    .catch(function(error){
+      console.log(error)
+    });
 }
 
 document.addEventListener("turbolinks:load", function() {
