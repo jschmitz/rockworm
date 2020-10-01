@@ -1,4 +1,5 @@
 import * as d3 from "d3"
+import getWeek from 'date-fns/getWeek'
 
 export function paint() {
   // set the dimensions and margins of the graph
@@ -17,7 +18,13 @@ export function paint() {
 
 
   // Labels of row and columns
-  var weeksOfYear = ["34", "35", "36", "37", "38"]
+  const startWeek = 32
+  let today = new Date();
+  let weeksOfYear = [];
+
+  for (let i = startWeek; i <= getWeek(today); i++) {
+    weeksOfYear.push(i);
+  }
   var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
   // Build X scales and axis:
