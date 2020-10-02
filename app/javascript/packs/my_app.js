@@ -17,43 +17,40 @@ export function paint() {
           "translate(" + margin.left + "," + margin.top + ")");
 
 
-  // Labels of row and columns
-  const startWeek = 32
-  let today = new Date();
-  let weeksOfYear = [];
-
-  for (let i = startWeek; i <= getWeek(today); i++) {
-    weeksOfYear.push(i);
-  }
-  var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-  // Build X scales and axis:
-  var x = d3.scaleBand()
-    .range([ 0, width ])
-    .domain(weeksOfYear)
-    .padding(0.01);
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-
-  // Build X scales and axis:
-  var y = d3.scaleBand()
-    .range([ height, 0 ])
-    .domain(daysOfWeek)
-    .padding(0.01);
-  svg.append("g")
-    .call(d3.axisLeft(y));
-
-  // Build color scale
-  var myColor = d3.scaleLinear()
-    .range(["white", "#69b3a2"])
-    .domain([1,10])
-
-  //Read the data
   d3.json("/workout_logs.json")
     .then(function(data) {
 
-      for(let i = 0; i < data.length; i++){
+      let weeksOfYear = [];
+      for (let i = data.week_of_year_min; i <= data.week_of_year_max; i++) {
+        weeksOfYear.push(i);
+      }
+      var daysOfWeek = ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"]
+
+      // Build X scales and axis:
+      var x = d3.scaleBand()
+        .range([ 0, width ])
+        .domain(weeksOfYear)
+        .padding(0.01);
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+
+      // Build X scales and axis:
+      var y = d3.scaleBand()
+        .range([ height, 0 ])
+        .domain(daysOfWeek)
+        .padding(0.01);
+      svg.append("g")
+        .call(d3.axisLeft(y));
+
+      // Build color scale
+      var myColor = d3.scaleLinear()
+        .range(["#F8F8F8", "#69b3a2"])
+        .domain([1,10])
+
+      //Read the data
+
+      for(let i = 0; i < data.calendar_workout_logs.length; i++){
 
         // create a tooltip
         var tooltip = d3.select("#my_dataviz")
@@ -77,7 +74,7 @@ export function paint() {
 
         var mousemove = function(d) {
           tooltip
-            .html("The exact value of<br>this cell is: " + data[i].notes)
+            .html(data.calendar_workout_logs[i].notes)
             .style("left", (d.screenX + 20) + "px")
             .style("top", (d.screenY - 120) + "px")
         }
@@ -86,7 +83,7 @@ export function paint() {
           tooltip.style("opacity", 0)
         }
 
-        let workout = [data[i]]
+        let workout = [data.calendar_workout_logs[i]]
         svg.selectAll()
             .data(workout, function(d) { return d.week_of_year+':'+d.day_of_week; })
             .enter()
