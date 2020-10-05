@@ -30,7 +30,7 @@ export function paint() {
       var x = d3.scaleBand()
         .range([ 0, width ])
         .domain(weeksOfYear)
-        .padding(0.01);
+        .padding(0.05);
       svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x))
@@ -39,17 +39,29 @@ export function paint() {
       var y = d3.scaleBand()
         .range([ height, 0 ])
         .domain(daysOfWeek)
-        .padding(0.01);
+        .padding(0.05);
       svg.append("g")
         .call(d3.axisLeft(y));
 
       // Build color scale
       var myColor = d3.scaleLinear()
-        .range(["#F8F8F8", "#69b3a2"])
+        .range(["#F5F5F5", "#69b3a2"])
         .domain([1,10])
 
-      //Read the data
+      // Draw gray background cells for missed days
+      for (let i = data.week_of_year_min; i <= data.week_of_year_max; i++) {
+        for (let j = 0; j < daysOfWeek.length; j++){
+          svg.append("rect")
+            .attr("x", x(i))
+            .attr("y", y(daysOfWeek[j]))
+            .attr("width", x.bandwidth())
+            .attr("height", y.bandwidth())
+            .style("fill", "#F8F8F8" );
 
+        }
+      }
+
+      // Loop through workout logs; draw scaled green rect and corresponding tool tips
       for(let i = 0; i < data.calendar_workout_logs.length; i++){
 
         // create a tooltip
@@ -96,7 +108,7 @@ export function paint() {
             .on("mouseover", mouseover)
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave)
-      }
+        }
 
       })
     .catch(function(error){
