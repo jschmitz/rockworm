@@ -48,6 +48,8 @@ class CallsController < ApplicationController
   #    "to": "+13123798952"
   #  }
   def get_digits
+    WorkoutLog.create! intensity: params[:digits], workout_date: Time.now
+
     say = Freeclimb::Say.new(text: "Tell me more about your workout.")
     rc = Freeclimb::RecordUtterance.new(action_url: "#{ENV["ROCKWORM_PUBLIC_URL"]}/record_utterance")
     percl_script = Freeclimb::PerclScript.new(commands: [say, rc])
