@@ -11,6 +11,15 @@ require("channels")
 // imported packages
 require("d3")
 
+import "bootstrap"
+import "../stylesheets/application"
+
+document.addEventListener("turbolinks:load", () => {
+  $('[data-toggle="tooltip"]').tooltip()
+  $('[data-toggle="popover"]').popover()
+})
+
+
 //my packs
 require("packs/my_app")
 
