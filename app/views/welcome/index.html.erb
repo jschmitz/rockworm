@@ -1,5 +1,21 @@
 <nav class="navbar sticky-top navbar-light bg-light">
   <a class="navbar-brand" href="#">Jake Schmitz</a>
+
+  <nav role="navigation">
+    <a target="_blank" href="https://github.com/jschmitz">
+      <%= image_tag "Octocat.png", width:"32", height:"32", alt:"Github Logo"%>
+    </a>
+    <a target="_blank" href="https://twitter.com/jakeschmitz">
+      <%= image_tag "twitter.svg", width:"32", height:"32", alt:"Twitter Logo"%>
+    </a>
+    <a target="_blank" href="https://www.goodreads.com/user/show/18015802-jake-schmitz">
+      <%= image_tag "goodreads.png", width:"32", height:"32", alt:"Goodreads Logo"%>
+    </a>
+    <a target="_blank" href="https://www.linkedin.com/in/jake-schmitz-745b3b1/">
+      <%= image_tag "linkedin.png", width:"32", height:"32", alt:"LinkedIn Logo" %>
+    </a>
+  </nav>
+
 </nav>
 
 <%= link_to "Workouts", workout_logs_path %>
