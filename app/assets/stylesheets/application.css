@@ -13,3 +13,13 @@
  *= require_tree .
  *= require_self
  */
+
+h1 {
+  color: red;
+}
+
+/* account for sticky header when linking to section ids */
+section {
+  padding-top:50px;
+  margin-top:-50px;
+}
