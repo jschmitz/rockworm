@@ -12,5 +12,25 @@
 
   <body>
     <%= yield %>
+    <footer class="page-footer font-small blue pt-4">
+      <div class="text-center">
+        <a target="_blank" href="https://github.com/jschmitz">
+          <%= image_tag "Octocat.png", width:"32", height:"32", alt:"Github Logo"%>
+        </a>
+        <a target="_blank" href="https://twitter.com/jakeschmitz">
+          <%= image_tag "twitter.svg", width:"32", height:"32", alt:"Twitter Logo"%>
+        </a>
+        <a target="_blank" href="https://www.goodreads.com/user/show/18015802-jake-schmitz">
+          <%= image_tag "goodreads.png", width:"32", height:"32", alt:"Goodreads Logo"%>
+        </a>
+        <a target="_blank" href="https://www.linkedin.com/in/jake-schmitz-745b3b1/">
+          <%= image_tag "linkedin.png", width:"32", height:"32", alt:"LinkedIn Logo" %>
+        </a>
+      </div>
+      <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://jakeschmitz.com/">jakeschmitz.com</a>
+      </div>
+    </footer>
+
   </body>
 </html>
