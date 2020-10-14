@@ -15,7 +15,7 @@
  */
 
 h1 {
-  color: red;
+  color: white;
 }
 
 /* account for sticky header when linking to section ids */
@@ -23,3 +23,12 @@ section {
   padding-top:50px;
   margin-top:-50px;
 }
+
+.container-fluid {
+  background-color: #003366;
+}
+
+.workouts {
+  color: white;
+}
+

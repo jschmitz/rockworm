@@ -30,7 +30,7 @@
 <div class="container-fluid">
   <div id="home" class="container vh-100 text-center">
     <div class="row align-items-center h-100">
-        <h1 class="col-12 text-center">Hello, I'm Jake</h1>
+        <h1 class="col-12 text-center">Hello, I'm Jake Schmitz</h1>
     </div>
   </div>
   <section id="projects">
@@ -46,8 +46,17 @@
     <p>Discuss awesomeness here</p>
   </section>
   <section id="habits">
-    <h1>Habits</h1>
-    <%= link_to "Workouts", workout_logs_path %>
+    <div class="workouts">
+      <h2>Habits</h2>
+      <div class="row">
+        <div class="col-6">
+          <%= link_to "Workouts", workout_logs_path %>
+        </div>
+        <div class="col-6">
+          <div id="my_dataviz"></div>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
