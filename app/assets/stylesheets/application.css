@@ -14,6 +14,10 @@
  *= require_self
  */
 
+html {
+  scroll-behavior: smooth;
+}
+
 h1 {
   color: white;
 }
@@ -31,6 +35,7 @@ section {
 .sections {
   background-color: white;
   color: black;
+  scroll-behavior: smooth;
 }
 
 .workouts {
