@@ -30,29 +30,53 @@
   </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid landing">
   <div id="home" class="container vh-100 text-center">
     <div class="row align-items-center h-100">
         <h1 class="col-12 text-center">Hello, I'm Jake Schmitz</h1>
     </div>
   </div>
+</div>
+<div class="container-fluid sections">
   <section id="projects">
-    <h1 id="projects">Projects</h1>
-    <ul>
-      <li>Simple Conferencing</li>
-      <li>Shop Safe</li>
-      <li>Data Collector</li>
-    </ul>
+    <div class="row">
+      <div class="col-8">
+        <h2 id="projects">Projects</h1>
+        <p>
+          The proof of concept side projects I've worked on during quarentine have been created using FreeClimb. I enjoy the two for one nature of the projects doing building apps that help me in my day and building items that folks might use. The first app worked on was a direct dial conferencing app with the thought more folks might want to make simple conference calls. The app had a text based sharing mechanism.  The app didn't spreadlike wildfire and I use it mainly for testing now. The second app, Shop Safe, was a hack day app. I had a really enjoyable day working with a few other folks and the concept might be useful for communicating in our pick up / shopping scenarios. The third app is a data collection app, right now it calls me everyday to see if I exercised. I love stats but really dislike entering data, the phone call is useful and this project plan to extend the application.
+        <ul>
+          <li>Simple Conferencing</li>
+          <li>Shop Safe</li>
+          <li>Data Collector</li>
+        </ul>
+      </div>
+      <div class="col-4">
+        <%= image_tag "programming.jpeg",alt:"Programming Picture" %>
+      </div>
+    </div>
   </section>
   <section id="seneca_foundation">
-    <h1 >Seneca Foundation</h1>
-    <p>Discuss awesomeness here</p>
+    <h2 >Seneca Foundation</h1>
+    <div class="row">
+      <div class="col">
+        <%= image_tag "learn_to_code.jpeg",alt:"Learn To Code" %>
+      </div>
+      <div class="col">
+        <p>I am excited and grateful to have the oppurtunity to contribute to the <a href="https://www.senecafoundation.org/">Seneca Foundation</a>. More details to come.</p>
+      </div>
+    </div>
   </section>
   <section id="habits">
     <div class="workouts">
       <h2>Habits</h2>
       <div class="row">
         <div class="col-6">
+          <p>
+            The idea that habits and the small things you do with discipline on a daily basis appeal to me. I've experienced this in academics, running and athletics and my career and its really interesting to view that those daily activities have driven the outcomes I've had, good and bad, enlightening. The books that have help to get me there are, in the order of readhing, are 7 Habits of Hightly Effiective People, Slight Edge, Power of Habit and the best of the bunch Atomic Habits. Atomic Habits had the biggest impact and is helping my continue to build better habits and wortha second read.
+          </p>
+          <p>
+            On of the my exploration projects is to collect more data. I've started with my exercise routine and collecting information there. Check out the heatmap of what I've been up to lately. I've discovered as I age that I need more Yoga and Pilates vs. running and jumping and heavy weights.
+          </p>
           <%= link_to "Workouts", workout_logs_path %>
         </div>
         <div class="col-6">

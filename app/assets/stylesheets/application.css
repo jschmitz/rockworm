@@ -24,11 +24,16 @@ section {
   margin-top:-50px;
 }
 
-.container-fluid {
+.landing {
   background-color: #003366;
 }
 
+.sections {
+  background-color: white;
+  color: black;
+}
+
 .workouts {
-  color: white;
+  color: black;
 }
 
