@@ -42,29 +42,37 @@
   <section id="about_me">
     <h2 id="about_me">About Me</h1>
     <div class="row">
-      <div class= "col-2">
+      <div class= "col">
         <%= image_tag "me.jpg", width:"250", height:"300", alt:"Picture of me" %>
       </div>
-      <div class= "col-10">
+      <div class= "col">
         <p>With 20 years of software development experience in a range of roles from technology consulting to leading in house development teams that deliver high quality software solutions, I learn and have fun every day.
+        </p>
+        <p>
+          I have had the great pleasure and oppurtunity to learn and grow at <a href="www.vailsys.com" alt="Vail Systems">Vail Systems</a> for ten plus years with a terffific team of people. At Vail I've had the oppurtunity to build teams, build long term connections and build really cool apps.
         </p>
       </div>
     </div>
   </section>
   <section id="projects">
     <div class="row">
-      <div class="col-8">
+      <div class="col">
         <h2 id="projects">Projects</h1>
         <p>
-          The proof of concept side projects I've worked on during quarentine have been created using FreeClimb. I enjoy the two for one nature of the projects doing building apps that help me in my day and building items that folks might use. The first app worked on was a direct dial conferencing app with the thought more folks might want to make simple conference calls. The app had a text based sharing mechanism.  The app didn't spreadlike wildfire and I use it mainly for testing now. The second app, Shop Safe, was a hack day app. I had a really enjoyable day working with a few other folks and the concept might be useful for communicating in our pick up / shopping scenarios. The third app is a data collection app, right now it calls me everyday to see if I exercised. I love stats but really dislike entering data, the phone call is useful and this project plan to extend the application.
+          The proof of concept side projects I've worked on during quarentine have been created using <a href="www.freeclimb.com">FreeClimb</a>. The apps were fun to build and if other folks found them useful, directly or checking out the code to build something else, thats great. The apps using FreeClimb out on Github are:
+        </p>
         <ul>
-          <li>Simple Conferencing</li>
-          <li>Shop Safe</li>
-          <li>Data Collector</li>
+          <li><a href="https://github.com/jschmitz/rockworm">Data Collector</a></li>
+          <li><a href="">Shop Safe</a></li>
+          <li><a href="https://github.com/jschmitz/kms_conferencing">Simple Conferencing</a></li>
         </ul>
+        </p>
+        <p>
+          The first POC app worked on was a direct dial conferencing app with the thought more folks might want to make simple conference calls. The app had a text based sharing mechanism.  The app didn't spreadlike wildfire and I use it mainly for testing now. The second app, Shop Safe, was a hack day app. I had a really enjoyable day working with a few other folks and the concept might be useful for communicating in our pick up / shopping scenarios. The third app is a data collection app, right now it calls me everyday to see if I exercised. I love stats but really dislike entering data, the phone call is useful and this project plan to extend the application.
+        </p>
       </div>
-      <div class="col-4">
-        <%= image_tag "programming.jpg",alt:"Programming Picture" %>
+      <div class="col">
+        <a href="www.freeclimb.com"><%= image_tag "freeclimb_logo.png",alt:"FreeClimb Logo" %></a>
       </div>
     </div>
   </section>
@@ -75,7 +83,7 @@
         <%= image_tag "learn_to_code.jpg",alt:"Learn To Code" %>
       </div>
       <div class="col">
-        <p>I am excited and grateful to have the oppurtunity to contribute to the <a href="https://www.senecafoundation.org/">Seneca Foundation</a>. More details to come.</p>
+        <p>I am excited and grateful to have the oppurtunity to contribute to the <a href="https://www.senecafoundation.org/">Seneca Foundation</a>. We have a great first cohort and a great team of folks making positive things happen and Mr. Jim Whiteley has a great vision for the Foundation.</p>
       </div>
     </div>
   </section>
@@ -83,16 +91,16 @@
     <div class="workouts">
       <h2>Habits</h2>
       <div class="row">
-        <div class="col-6">
+        <div class="col">
           <p>
-            The idea that habits and the small things you do with discipline on a daily basis appeal to me. I've experienced this in academics, running and athletics and my career and its really interesting to view that those daily activities have driven the outcomes I've had, good and bad, enlightening. The books that have help to get me there are, in the order of readhing, are 7 Habits of Hightly Effiective People, Slight Edge, Power of Habit and the best of the bunch Atomic Habits. Atomic Habits had the biggest impact and is helping my continue to build better habits and wortha second read.
+            The idea the small things you do with discipline on a daily basis appeal to me. Looking back, I can see the impacts of habits for big efforts in my life in academics, running and athletics and my career and its really interesting to view that those daily activities have driven the outcomes I've had good outcomes when my day to day habits were good and when my habits slipped my outcomes weren't as good. The books that have help to get me there are, in the order of readhing, are 7 Habits of Hightly Effiective People, Slight Edge, Power of Habit and the best of the bunch Atomic Habits. Atomic Habits had the biggest impact and is helping my continue to build better habits and wortha second read. If you were to pick one book to read Atomic Habits would be my choice.
           </p>
           <p>
-            On of the my exploration projects is to collect more data. I've started with my exercise routine and collecting information there. Check out the heatmap of what I've been up to lately. I've discovered as I age that I need more Yoga and Pilates vs. running and jumping and heavy weights.
+            On of the my exploration projects is to collect more data. I've started with my exercise routine and collecting information there. Check out the heatmap of what I've been up to lately. I've discovered as I age that I need more Yoga and Pilates and rest vs. running and jumping and heavy weights. Building the calendar heatmap you see was a lot of fun (ties back to Atomic Habits!) and making sure my green squares are trending in a good direction.
           </p>
           <%=link_to "Workouts", workout_logs_path %>
         </div>
-        <div class="col-6">
+        <div class="col">
           <div id="my_dataviz"></div>
         </div>
       </div>
@@ -101,10 +109,11 @@
   <section id="about_me">
     <h2 id="contact_me">Contact Me</h1>
     <div class="row">
-      <div class= "col-4">
-        <p>Get in touch by sending me a message or try giving me a call!
+      <div class= "col">
+        <p>Get in touch by sending me a message or try giving me a call! </p>
+        <p>Both, of course, are powered by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a>  :) </p>
       </div>
-      <div class= "col-8">
+      <div class= "col">
         <p>Send me a Message</p>
         <p>Give me a call</p>
       </div>
