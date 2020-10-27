@@ -114,7 +114,11 @@
         <p>Both, of course, are powered by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a>  :) </p>
       </div>
       <div class= "col">
-        <p>Send me a Message</p>
+        <%= form_with(url: "/messages", method: "post") do %>
+          <%= label_tag(:message, "Send me a message") %>
+          <%= text_field_tag(:message) %>
+          <%= submit_tag("Send Message!") %>
+        <% end %>
         <p>Give me a call</p>
       </div>
     </div>

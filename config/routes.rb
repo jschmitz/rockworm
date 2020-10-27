@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   post "/record_utterance", to: "calls#record_utterance"
   post "/category_select", to: "calls#category_select"
   get "/grammar_file", to: "calls#grammar_file"
+  post "/messages", to: "message#create"
 end
