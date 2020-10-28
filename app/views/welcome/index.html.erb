@@ -119,7 +119,7 @@
           <%= text_field_tag(:message) %>
           <%= submit_tag("Send Message!") %>
         <% end %>
-        <p>Give me a call</p>
+        <p>Give me a call <%= number_to_phone(@contact_phone_number,  area_code: true) %></p>
       </div>
     </div>
   </section>
