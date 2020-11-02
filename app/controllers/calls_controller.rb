@@ -1,5 +1,5 @@
 require "freeclimb"
-require "google/cloud/speech"
+require "recording"
 require "nokogiri"
 
 class CallsController < ApplicationController
@@ -83,13 +83,12 @@ class CallsController < ApplicationController
   def record_utterance
     # TODO - This will work for one user only. Must change for multi users.
     wl = WorkoutLog.last
+
+    # update one at a time to ensure the recording id is persisted if the transcription fails
     wl.update!(recording_id: params[:recordingId])
-    speech_to_text(params[:recordingId])
+    wl.update!(notes: Recording.new(params[:recordingId]).transcribe)
 
     say = Freeclimb::Say.new(text: "What category of workout did you get in?")
-
-    puts "#{ENV["ROCKWORM_PUBLIC_URL"]}/grammar_file"
-    puts "#{ENV["ROCKWORM_PUBLIC_URL"]}"
 
     getSpeech = Freeclimb::GetSpeech.new(action_url: "#{ENV["ROCKWORM_PUBLIC_URL"]}/category_select", grammar_file: "#{ENV["ROCKWORM_PUBLIC_URL"]}/grammar_file", grammar_type: "URL")
 
@@ -156,39 +155,31 @@ EOF
     send_data doc, filename: "workout_categories.xml"
   end
 
-  def speech_to_text(recording_id)
-    Freeclimb.configure do |config|
-      # Configure HTTP basic authorization: fc
-      config.username = ENV["FC_ACCOUNT_ID"]
-      config.password = ENV["FC_ACCOUNT_TOKEN"]
-    end
-    api_instance = Freeclimb::DefaultApi.new
-    temp_file = api_instance.download_a_recording_file(recording_id)
+  def web_call
+    say = Freeclimb::Say.new(text: "Hello, thank you for calling and thank you for visiting the website. Please leave me a message, with contact inofrmation, and I can get back to you.  Thank you!")
+    rco = Freeclimb::RecordUtterance.new(action_url: "#{ENV["ROCKWORM_PUBLIC_URL"]}/record_utterance_web")
+    percl_script = Freeclimb::PerclScript.new(commands: [say, rco])
 
-    #Instantiates a client
-    speech = Google::Cloud::Speech.speech
+    render json: Freeclimb::percl_to_json(percl_script)
+  rescue => e
+    puts "The controller had an error" + e
+  end
 
-    # The raw audio
-    audio_file = File.binread temp_file.path
+  def record_utterance_web
+    # Write the recording ID and Call ID to log for troubleshooting
+    puts "Recording ID from website call is: #{params[:recordingId]}"
+    puts "Call ID from website call is: #{params[:callId]}"
 
-    # The audio file's encoding and sample rate
-    config = { encoding: :MULAW,
-               sample_rate_hertz: 8_000,
-               language_code: "en-US" }
-    audio = { content: audio_file }
+    message = Recording.new(params[:recordingId]).transcribe
 
-    # Detects speech in the audio file
-    response = speech.recognize config: config, audio: audio
-    results = response.results
+    send_sms = Freeclimb::Sms.new(to: ENV["MY_PHONE_NUMBER"],
+                                  from: ENV["ROCKWORM_PHONE_NUMBER"],
+                                  text: message)
 
-    # Get first result because we only processed a single audio file
-    # Each result represents a consecutive portion of the audio
-    results.first.alternatives.each do |alternatives|
-      wl = WorkoutLog.last
-      wl.update!(notes: alternatives.transcript)
-    end
+    #hangup = Freeclimb::Hangup.new
+    percl_script = Freeclimb::PerclScript.new(commands: [send_sms])
 
-    temp_file.delete
+    render json: Freeclimb::percl_to_json(percl_script)
   rescue Exception => e
     puts "The controller had an error" + e.message
     puts "The controller had an error" + e.backtrace.inspect
