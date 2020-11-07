@@ -28,6 +28,11 @@ section {
   margin-top:-50px;
 }
 
+footer {
+  background-color: #003366;
+  color: white;
+}
+
 .landing {
   background-color: #003366;
 }
