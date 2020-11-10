@@ -17,7 +17,7 @@ class WebCallsController < ApplicationController
     message = Recording.new(params[:recordingId]).transcribe
 
     send_sms = Freeclimb::Sms.new(to: ENV["MY_PHONE_NUMBER"],
-                                  from: ENV["ROCKWORM_PHONE_NUMBER"],
+                                  from: ENV["ROCKWORM_WEB_PHONE_NUMBER"],
                                   text: message)
 
     #hangup = Freeclimb::Hangup.new
