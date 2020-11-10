@@ -53,6 +53,7 @@ footer {
 
 .separator-row {
   margin: 50px 0px 50px 0px;
-  padding: 20px;
-  background-color: #004282;
+  padding: 20px 0px 20px 0px;
+  background-color: #D4D7DB;
+  font-style: italic;
 }
