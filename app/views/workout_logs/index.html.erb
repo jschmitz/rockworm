@@ -1,13 +1,42 @@
-<h1>Listing Workouts</h1>
+<nav class="navbar sticky-top navbar-expand-md navbar-light bg-light">
+  <a class="navbar-brand" href="/">Jake Schmitz</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+      <a target="_blank" href="https://github.com/jschmitz">
+        <%= image_tag "Octocat.png", width:"32", height:"32", alt:"Github Logo"%>
+      </a>
+      <a target="_blank" href="https://twitter.com/jakeschmitz">
+        <%= image_tag "twitter.svg", width:"32", height:"32", alt:"Twitter Logo"%>
+      </a>
+      <a target="_blank" href="https://www.goodreads.com/user/show/18015802-jake-schmitz">
+        <%= image_tag "goodreads.png", width:"32", height:"32", alt:"Goodreads Logo"%>
+      </a>
+      <a target="_blank" href="https://www.linkedin.com/in/jake-schmitz-745b3b1/">
+        <%= image_tag "linkedin.png", width:"32", height:"32", alt:"LinkedIn Logo" %>
+      </a>
+      <a target="_blank" href="https://www.jakeschmitz.com/blog">
+        <%= image_tag "blog.png", width:"32", height:"32", alt:"Blog Logo" %>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<h3>Workout Heatmap</h3>
+
+<p>The darker the color the more intense the workout!</p>
 
 <div id="my_dataviz"></div>
 
-<table>
+<h3> Workout List </h3>
+<table class="table table-striped">
   <tr>
-    <th>Date</th>
-    <th>Intensity</th>
-    <th>Category</th>
-    <th>Notes</th>
+    <th scope="col">Date</th>
+    <th scope="col">Intensity</th>
+    <th scope="col">Category</th>
+    <th scope="col">Notes</th>
   </tr>
 
   <% @workout_logs.each do |wl| %>
