@@ -23,13 +23,14 @@ h1 {
 }
 
 h2 {
-  color: #04004E;
+  color: #003366;
 }
 
 /* account for sticky header when linking to section ids */
 section {
   padding-top:50px;
-  margin-top:-50px;
+  /* margin-top:-50px; */
+  margin: -50px 150px 0px 150px
 }
 
 footer {
@@ -54,6 +55,7 @@ footer {
 .separator-row {
   margin: 50px 0px 50px 0px;
   padding: 20px 0px 20px 0px;
-  background-color: #D4D7DB;
+  /*background-color: #D4D7DB;*/
+  background-color: #003366;
   font-style: italic;
 }
