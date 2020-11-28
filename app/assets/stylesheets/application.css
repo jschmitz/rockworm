@@ -30,7 +30,9 @@ h2 {
 section {
   padding-top:50px;
   /* margin-top:-50px; */
-  margin: -50px 150px 0px 150px
+  margin: -50px 150px 0px 150px;
+  padding-right: 50px;
+  padding-left: 50px;
 }
 
 footer {

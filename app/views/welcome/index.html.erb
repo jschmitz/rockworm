@@ -44,37 +44,39 @@
     <h2 id="about_me">About Me</h1>
     <div class="row">
       <div class= "col">
-        <%= image_tag "about_collage.jpg", alt:"About Me Collage", class:"img-fluid" %>
+        <%= image_tag "about_collage.jpg", alt:"About Me Collage", class:"img-fluid", style:"min-width:25em; max-width:75%" %>
       </div>
       <div class= "col">
-        <p>With 20 years of software development experience in a range of roles from technology consulting to leading in house development teams that deliver high quality software solutions, I learn and have fun every day.
+        <p>Hi, I'm Jake Schmitz. Dad. Husband. Leader. Developer.</p>
+        <p>The software industry has been a With 20 years of software development experience in a range of roles from technology consulting to leading in house development teams that deliver high quality software solutions, I learn and have fun every day.
         </p>
         <p>
-          I have had the great pleasure and oppurtunity to learn and grow at <a href="www.vailsys.com" alt="Vail Systems">Vail Systems</a> for ten plus years with a terffific team of people. At Vail I've had the oppurtunity to build teams, build long term connections and build really cool apps.
+          The last ten yeas I have had the great oppurtunity to learn and grow at <a href="www.vailsys.com" alt="Vail Systems">Vail Systems</a> for ten plus years with a terffific team of people. At Vail, there have been many challenges to build and great teams and great software. New challenges keep emerging and I'm grateful for those challenges and the people that collaborate on those to arrive at successful outomes.
         </p>
       </div>
     </div>
   </section>
 
   <section class="separator-row text-center">
-    <h1>Continous Learning</h1>
+    <h1>Lifelong Learning</h1>
   </section>
 
   <section id="projects">
     <div class="row">
       <div class="col">
-        <h2 id="projects">Projects</h1>
+        <!-- <h2 id="projects">Projects</h1> -->
+        <p>In elementry school I had a trap keep and the lead page was a nice had a Lifelong Lerning picture. I'm still going with mantra thiry years later! Reading books, video course and applying those learnings on a day to day basis, side project or blog post help me keep the learning going. </p>
         <p>
-          The proof of concept side projects I've worked on during quarentine have been created using <a href="www.freeclimb.com">FreeClimb</a>. The apps were fun to build and if other folks found them useful, directly or checking out the code to build something else, thats great. The apps using FreeClimb out on Github are:
+          This year with the pandemic quarantine and the kids sleeping through the night consistently there has been more energy available for proof of concept side projects.
+          The focus for the side projects has been to use <a href="www.freeclimb.com">FreeClimb</a>. The apps were fun to build and if other folks found them useful in anyway that is great.
         </p>
         <ul>
           <li><a href="https://github.com/jschmitz/rockworm">Data Collector</a></li>
-          <li><a href="">Shop Safe</a></li>
           <li><a href="https://github.com/jschmitz/kms_conferencing">Simple Conferencing</a></li>
         </ul>
         </p>
         <p>
-          The first POC app worked on was a direct dial conferencing app with the thought more folks might want to make simple conference calls. The app had a text based sharing mechanism.  The app didn't spreadlike wildfire and I use it mainly for testing now. The second app, Shop Safe, was a hack day app. I had a really enjoyable day working with a few other folks and the concept might be useful for communicating in our pick up / shopping scenarios. The third app is a data collection app, right now it calls me everyday to see if I exercised. I love stats but really dislike entering data, the phone call is useful and this project plan to extend the application.
+          The next app on the radar is to keep building something related to habits and making data collection easy.
         </p>
       </div>
       <div class="col">
@@ -131,8 +133,9 @@
     <h2 id="contact_me">Contact Me</h1>
     <div class="row">
       <div class= "col">
-        <p>Get in touch by sending me a message or try giving me a call! </p>
-        <p>Both, of course, are powered by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a>  :) </p>
+        <p>It would be great to hear from you! You can give me a call (it will be an automated message but a fun automated messsage or send a message away.  get a message Get in touch by sending me a message or try giving me a call! </p>
+        <p>The phone number and the texting capabilites are both powered by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a> 
+        </p>
       </div>
       <div class= "col">
         <%= form_with(url: "/messages", method: "post") do %>
