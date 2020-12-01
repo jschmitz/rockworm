@@ -134,16 +134,18 @@
     <div class="row">
       <div class= "col">
         <p>It would be great to hear from you! You can give me a call (it will be an automated message but a fun automated messsage or send a message away.  get a message Get in touch by sending me a message or try giving me a call! </p>
-        <p>The phone number and the texting capabilites are both powered by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a> 
+        <p>The phone number and the texting capabilites are both powered by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a>
         </p>
       </div>
-      <div class= "col">
-        <%= form_with(url: "/messages", method: "post") do %>
-          <%= label_tag(:message, "Send me a message") %>
-          <%= text_field_tag(:message) %>
-          <%= submit_tag("Send Message!") %>
-        <% end %>
-        <p>Give me a call <%= number_to_phone(@contact_phone_number,  area_code: true) %></p>
+      <div class= "col" data-controller="message">
+        <div>
+          <div data-target="message.result"></div>
+          <input data-target="message.content" type = "text">
+          <button data-action="click->message#send">Send Message</button>
+        </div>
+        <div>
+          <p>Give me a call <%= number_to_phone(@contact_phone_number,  area_code: true) %></p>
+        </div>
       </div>
     </div>
   </section>

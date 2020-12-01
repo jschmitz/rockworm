@@ -11,6 +11,7 @@ require("channels")
 // imported packages
 require("d3")
 
+import "controllers"
 import "bootstrap"
 import "../stylesheets/application"
 
