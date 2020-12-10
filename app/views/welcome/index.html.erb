@@ -140,11 +140,14 @@
       <div class= "col" data-controller="message">
         <div>
           <div data-target="message.result"></div>
-          <input data-target="message.content" type = "text">
-          <button data-action="click->message#send">Send Message</button>
+          <textarea class="form-control" data-target="message.content" rows="3"></textarea>
+          <div>
+            <button data-action="click->message#send" class="btn btn-primary mb-3 spacer" >Send Message</button>
+          </div>
         </div>
-        <div>
-          <p>Give me a call <%= number_to_phone(@contact_phone_number,  area_code: true) %></p>
+        <div >
+          <p>or</p>
+          <p>Call <%= number_to_phone(@contact_phone_number,  area_code: true) %></p>
         </div>
       </div>
     </div>
