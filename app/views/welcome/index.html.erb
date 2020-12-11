@@ -48,10 +48,11 @@
       </div>
       <div class= "col">
         <p>Hi, I'm Jake Schmitz. Dad. Husband. Leader. Software Developer.</p>
-        <p>The software industry has been tremdouse experience and during that the last 20 years I am grateful have had the oppurtunity to experience a range of roles from technology consulting to leading in house development teams that deliver high quality software solutions, I learn and have fun every day.
+        <p>The main thing I do every day is learn and have fun while I'm learning. Learning compounds and getting a little better every day is big deal!<p>
+        <p>Professionally, the software industry has been provided a tremendous experience over the last 20 years and I am grateful to have had the oppurtunity to experience a range of roles delivering software.
         </p>
         <p>
-          The last ten yeas I have had the oppurtunity to learn and grow at <a href="https://www.vailsys.com" rel="noreferrer noopener" target="_blank" alt="Vail Systems">Vail Systems</a> with a terffific team of people. At Vail, there have been many challenges to build and great teams and great software. New challenges continue to emerge and I'm grateful for those challenges and for the collaboration and learning we have to meet those challenges.
+          The last ten plus years I have had the oppurtunity to learn and grow at <a href="https://www.vailsys.com" rel="noreferrer noopener" target="_blank" alt="Vail Systems">Vail Systems</a> with a terffific team of people. At Vail, there have been many challenges to build great teams and great software. New challenges continue to emerge and I'm grateful for those challenges and for the collaboration and continous learning required to meet those challenges.
         </p>
       </div>
     </div>
@@ -65,7 +66,7 @@
     <div class="row">
       <div class="col">
         <h2 id="projects">Projects</h1>
-        <p>In elementry school I had a trap keep and the lead page was a nice had a Lifelong Lerning picture. I'm still going with mantra thiry years later! Reading books, video course and applying those learnings on a day to day basis, side project or blog post help me keep the learning going. </p>
+        <p>In elementry school I had a trap keep and the lead page was a nice had a Lifelong Lerning picture. I'm still going with mantra thirty years later! Reading books, video course and applying those learnings on a day to day basis, side project or blog post help me keep the learning going. </p>
         <p>
           This year with the pandemic quarantine and the kids sleeping through the night consistently there has been more energy available for proof of concept side projects.
           The focus for the side projects has been to use <a href="https://www.freeclimb.com" target="_blank" rel="noreferrer noopener" alt="FreeClimb">FreeClimb</a>. The apps were fun to build and if other folks found them useful in anyway that is great.
@@ -74,9 +75,6 @@
           <li><a href="https://github.com/jschmitz/rockworm" target="_blank" rel="noreferrer noopener">Data Collector</a></li>
           <li><a href="https://github.com/jschmitz/kms_conferencing" target="_blank" rel="noreferrer noopener">Simple Conferencing</a></li>
         </ul>
-        </p>
-        <p>
-          The next app on the radar is to keep building something related to habits and making data collection easy.
         </p>
       </div>
       <div class="col">
@@ -111,7 +109,7 @@
       <div class="row">
         <div class="col">
           <p>
-            The idea the small things you do with discipline on a daily basis appeal to me. Looking back, I can see the impacts of habits for big efforts in my life in academics, running and athletics and my career and its really interesting to view that those daily activities have driven the outcomes I've had good outcomes when my day to day habits were good and when my habits slipped my outcomes weren't as good. The books that have help to get me there are, in the order of readhing, are 7 Habits of Hightly Effiective People, Slight Edge, Power of Habit and the best of the bunch Atomic Habits. Atomic Habits had the biggest impact and is helping my continue to build better habits and wortha second read. If you were to pick one book to read Atomic Habits would be my choice.
+            The idea the small things you do with consistent discipline basis appeal to me. Looking back, I can see the impacts of my habits and the results of my academic, professional, and athletic endevors. The better the habits the better the results. The books I've read to help understand that pattern and build a few better habits, still a long ways to go,  were 7 Habits of Hightly Effiective People, Slight Edge, Power of Habit and the best of the bunch is Atomic Habits. Atomic Habits had the biggest impact and is helping my continue to build better habits.
           </p>
           <p>
             On of the my exploration projects is to collect more data. I've started with my exercise routine and collecting information there. Check out the heatmap of what I've been up to lately. I've discovered as I age that I need more Yoga and Pilates and rest vs. running and jumping and heavy weights. Building the calendar heatmap you see was a lot of fun (ties back to Atomic Habits!) and making sure my green squares are trending in a good direction.
@@ -133,9 +131,10 @@
     <h2 id="contact_me">Contact Me</h1>
     <div class="row">
       <div class= "col">
-        <p>It would be great to hear from you! You can give me a call (it will be an automated message but a fun automated messsage or send a message away.  get a message Get in touch by sending me a message or try giving me a call! </p>
-        <p>The phone number and the texting capabilites are both powered by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a>
+        <p>It would be great to hear from you! That message send will deliver a text message to me or try out an automated phone experience by calling
+          <%= number_to_phone(@contact_phone_number,  area_code: true) %> .
         </p>
+        <p>The messaging and calling automation are both provided by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a></p>
       </div>
       <div class= "col" data-controller="message">
         <div>
