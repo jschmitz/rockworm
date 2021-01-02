@@ -17,13 +17,16 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  host: <%= ENV["ROCKWORM_DB_HOST"] %>
+  username: <%= ENV["ROCKWORM_DB_USER"] %>
+  password: <%= ENV["ROCKWORM_DB_PASSWORD"] %>
+  database: <%= ENV["ROCKWORM_DB_DATABASE"] %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
-  database: rockworm_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

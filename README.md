@@ -1,24 +1,38 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Overview
 
-Things you may want to cover:
+This is my personal webiste.
 
-* Ruby version
+## How to install from github
 
-* System dependencies
+```bash
+git clone git@github.com:jschmitz/rockworm.git
+```
 
-* Configuration
+```bash
+rvm gemset create rockworm
+rvm gemset use rockworm
+bundle
+```
 
-* Database creation
+## Environment Variables
+*  ROCKWORM_DB_HOST
+*  ROCKWORM_DB_PASSWORD
+*  ROCKWORM_DB_USER
+*  ROCKWORM_PUBLIC_URL
+*  ROCKWORM_APPLICATION_ID
+*  ROCKWORM_PHONE_NUMBER
+*  ROCKWORM_WEB_PHONE_NUMBER
+*  MY_PHONE_NUMBER
+*  GOOGLE_APPLICATION_CREDENTIALS
 
-* Database initialization
+## Docker Compose 
+The docker compose file can be used to run the application.
 
-* How to run the test suite
+```bash
+docker-compose up
+```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Local Instance
+The config files and environments variables can also be used to run a local instance of the application.

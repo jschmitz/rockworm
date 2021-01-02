@@ -1,0 +1,29 @@
+# docker-compose.yml
+version: '3.0'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${ROCKWORM_DB_USER}
+      POSTGRES_PASSWORD: ${ROCKWORM_DB_PASSWORD}
+      POSTGRES_DB: ${ROCKWORM_DB_USER}
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - ROCKWORM_DB_HOST=${ROCKWORM_DB_HOST}
+      - ROCKWORM_DB_PASSWORD=${ROCKWORM_DB_PASSWORD}
+      - ROCKWORM_DB_USER=${ROCKWORM_DB_USER}
+      - ROCKWORM_PUBLIC_URL=${ROCKWORM_PUBLIC_URL}
+      - ROCKWORM_APPLICATION_ID=${ROCKWORM_APPLICATION_ID}
+      - ROCKWORM_PHONE_NUMBER=${ROCKWORM_PHONE_NUMBER}
+      - ROCKWORM_WEB_PHONE_NUMBER=${ROCKWORM_WEB_PHONE_NUMBER}
+      - MY_PHONE_NUMBER=${MY_PHONE_NUMBER}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
