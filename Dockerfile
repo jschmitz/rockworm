@@ -9,7 +9,7 @@ RUN bundle config --global frozen 1
 WORKDIR /usr/src/app
 # We copy these files from our current application to the /app container
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle check || bundle install
 
 COPY . .
 CMD ["rails", "server", "-b", "0.0.0.0"]

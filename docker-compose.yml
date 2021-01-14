@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "3000:3000"
+      - "3000"
     depends_on:
       - db
     environment:
@@ -27,3 +27,11 @@ services:
       - ROCKWORM_WEB_PHONE_NUMBER=${ROCKWORM_WEB_PHONE_NUMBER}
       - MY_PHONE_NUMBER=${MY_PHONE_NUMBER}
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    links:
+      - web
+    ports:
+      - 80:80
