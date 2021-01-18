@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Productivity: Ngrok subdomain replace | Jake’s Blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Productivity: Ngrok subdomain replace" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The mornings I’m working with FreeClimb at some point in my testing an ngrok connection is needed to be set up for my local test environment. This results in creating new ngrok tunnel, updating my FreeClimb webhook urls on my dashboard and then updating my local app environment variables used for callbacks from FreeClimb. This procedure has been executed more than twice so being a good lazy developer I wrote a little script to expedite the procedure and thought other folks may find it useful." />
+<meta property="og:description" content="The mornings I’m working with FreeClimb at some point in my testing an ngrok connection is needed to be set up for my local test environment. This results in creating new ngrok tunnel, updating my FreeClimb webhook urls on my dashboard and then updating my local app environment variables used for callbacks from FreeClimb. This procedure has been executed more than twice so being a good lazy developer I wrote a little script to expedite the procedure and thought other folks may find it useful." />
+<link rel="canonical" href="https://www.jakeschmitz.com/blog/2020/06/04/ngrok-subdomain-replace.html" />
+<meta property="og:url" content="https://www.jakeschmitz.com/blog/2020/06/04/ngrok-subdomain-replace.html" />
+<meta property="og:site_name" content="Jake’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-04T06:28:00-05:00" />
+<script type="application/ld+json">
+{"description":"The mornings I’m working with FreeClimb at some point in my testing an ngrok connection is needed to be set up for my local test environment. This results in creating new ngrok tunnel, updating my FreeClimb webhook urls on my dashboard and then updating my local app environment variables used for callbacks from FreeClimb. This procedure has been executed more than twice so being a good lazy developer I wrote a little script to expedite the procedure and thought other folks may find it useful.","headline":"Productivity: Ngrok subdomain replace","dateModified":"2020-06-04T06:28:00-05:00","datePublished":"2020-06-04T06:28:00-05:00","url":"https://www.jakeschmitz.com/blog/2020/06/04/ngrok-subdomain-replace.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jakeschmitz.com/blog/2020/06/04/ngrok-subdomain-replace.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://www.jakeschmitz.com/blog/feed.xml" title="Jake's Blog" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Jake&#39;s Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Productivity: Ngrok subdomain replace</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-06-04T06:28:00-05:00" itemprop="datePublished">Jun 4, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The mornings I’m working with FreeClimb at some point in my testing an ngrok connection is needed to be set up for my local test environment. This results in creating new ngrok tunnel, updating my FreeClimb webhook urls on my dashboard and then updating my local app environment variables used for callbacks from FreeClimb. This procedure has been executed more than twice so being a good lazy developer I wrote a little script to expedite the procedure and thought other folks may find it useful.</p>
+
+<p>The script is posted as a <a href="https://gist.github.com/jschmitz/df4e1f33fd19f05726ed5c909e013d5c/">public gist</a> and, if its helpful, please modify and use as needed. The script, as written, requires a specific setup that I’ll describe.</p>
+
+<h2 id="ngrok">Ngrok</h2>
+<p>The script expects you to be using Basic Auth with your ngrok connection.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ngrok http <span class="nt">--auth</span> user:pass 3000
+</code></pre></div></div>
+
+<p>You are creating a tunnel into your machine so you might as well not be the least secure person out there. Also, I explicitly severe the connection when I am completed with my testing.</p>
+
+<h2 id="setup-environment-variables">Setup Environment Variables</h2>
+<p>The script needs the following environment variables created before execution:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Environment Variable</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FREECLIMB_ACCOUNT_ID</td>
+      <td>Your FreeClimb account id. Obtain from your FreeClimb Dashboard. This is used in the curl request to FreeClimb.</td>
+    </tr>
+    <tr>
+      <td>FREECLIMB_ACCOUNT_TOKEN</td>
+      <td>Your FreeClimb account id. Obtain from your FreeClimb Dashboard. This is used in the curl request to FreeClimb.</td>
+    </tr>
+    <tr>
+      <td>YOUR_APP_PUBLIC_URL</td>
+      <td>This is the public url ngrok provides. The format must be: ‘http://username:password@subdomain.ngrok.io”</td>
+    </tr>
+    <tr>
+      <td>YOUR_APP_APPLICATION_ID</td>
+      <td>Your FreeClimb application id. Obtain from your FreeClimb Dashboard. This is used in the curl request to FreeClimb.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>You can name these anything, update the script to match your names.</p>
+
+<h2 id="update-freeclimb-webhooks">Update FreeClimb Webhooks</h2>
+<p>The script currently <a href="https://docs.freeclimb.com/reference/applications#update-an-application">updates your FreeClimb Application</a> voiceURL (<a href="https://docs.freeclimb.com/reference/calls-2#inbound">inbound call webhook</a>) and smsUrl (<a href="https://docs.freeclimb.com/reference/sms-2#messagedelivery-1">messageDelivery webhook</a>). You may need to add or remove FreeClimb Application attributes being updated to fit your applications needs.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s2">"{</span><span class="se">\"</span><span class="s2">voiceUrl</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="nv">$new_public_url</span><span class="s2">/inbound_calls</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">smsUrl</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="nv">$new_public_url</span><span class="s2">/inbound_messages</span><span class="se">\"</span><span class="s2">}"</span> <span class="nt">-u</span> <span class="nv">$KMS_CONF_USERNAME</span>:<span class="nv">$KMS_CONF_PASSWORD</span> https://freeclimb.com/apiserver/Accounts/<span class="nv">$KMS_CONF_USERNAME</span>/Applications/<span class="nv">$KMS_CONF_APPLICATION_ID</span>
+</code></pre></div></div>
+
+<h2 id="execution">Execution</h2>
+<ul>
+  <li>Set your permissions to execute (see the first reference link)</li>
+  <li>Pass in the subdomain</li>
+</ul>
+
+<p>Time to run the script. I copy the subdomain from the ngrok terminal and paste to pass the new subdomain to the script:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> ./ngork_update newNgrokSubdomainPasted
+</code></pre></div></div>
+
+<p>The leading period will execute the script in the current shell vs. a sub shell. If the script is executed in a subshell] when you start your application in the current shell the environment variable will remain unchanged.</p>
+
+<p>And done! You’re all set to go to start making calls and sending messages to your local test environment.</p>
+
+<h2 id="references">References</h2>
+<p>I don’t make Bash Scripts on a daily basis so I found the need to google a bunch of stuff. The list of resources I used is below and these could help you further modify and extend the example script.</p>
+<ul>
+  <li>https://www.taniarascia.com/how-to-create-and-use-bash-scripts/</li>
+  <li>https://www.lifewire.com/pass-arguments-to-bash-script-2200571</li>
+  <li>https://stackoverflow.com/questions/18547881/shell-script-to-set-environment-variables</li>
+  <li>https://linuxhint.com/curl_bash_examples/</li>
+  <li>https://stackoverflow.com/questions/13210880/replace-one-substring-for-another-string-in-shell-script</li>
+  <li>https://stackoverflow.com/questions/9741433/appending-a-line-break-to-an-output-file-in-a-shell-script</li>
+  <li>https://stackoverflow.com/questions/14744904/how-to-execute-script-in-the-current-shell-on-linux</li>
+</ul>
+
+  </div><a class="u-url" href="/blog/2020/06/04/ngrok-subdomain-replace.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Jake&#39;s Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Jake&#39;s Blog</li><li><a class="u-email" href="mailto:jschmitz@gmail.com">jschmitz@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jschmitz"><svg class="svg-icon"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jschmitz</span></a></li><li><a href="https://www.twitter.com/jakeschmitz"><svg class="svg-icon"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jakeschmitz</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>This is a blog about what I&#39;m learning about</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

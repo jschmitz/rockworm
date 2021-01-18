@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://www.jakeschmitz.com/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://www.jakeschmitz.com/blog/" rel="alternate" type="text/html" /><updated>2021-01-16T06:36:35-06:00</updated><id>https://www.jakeschmitz.com/blog/feed.xml</id><title type="html">Jake’s Blog</title><subtitle>This is a blog about what I'm learning about</subtitle><entry><title type="html">Minimal AJAX with Stimulus, Rails 6 and JS HTTP POST Request using Fetch</title><link href="https://www.jakeschmitz.com/blog/2020/12/19/rails6-stimulus-flash.html" rel="alternate" type="text/html" title="Minimal AJAX with Stimulus, Rails 6 and JS HTTP POST Request using Fetch" /><published>2020-12-19T05:22:00-06:00</published><updated>2020-12-19T05:22:00-06:00</updated><id>https://www.jakeschmitz.com/blog/2020/12/19/rails6-stimulus-flash</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/12/19/rails6-stimulus-flash.html">&lt;p&gt;The process of adding AJAX calls to a Rails application generally results in adding a few hefty libraries to your apps especially if the result is a framework being added to handle dynamic user interactions. The Rails 6 + Stimulus + Turbolinks advertises a lightweight approach to provide dynamic user interactions and the advertising did lives up to its billing. Stimulus provides a very small footprint, short setup time, and straightforward view and controller wiring to add dynamic user interactions to your application.&lt;/p&gt;
+
+&lt;p&gt;Two areas caused a small bit of time loss in setup:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Setting up the folders and paths for stimulus&lt;/li&gt;
+  &lt;li&gt;Creating an HTTP POST request (Using fetch and providing a CRSF Token)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The following will show a simple example and explicitly show the folder structure used and the function calls to provide the CSRF Token for a HTTP POST request to your Rails Controller.&lt;/p&gt;
+
+&lt;h2 id=&quot;stimulus-setup&quot;&gt;Stimulus Setup&lt;/h2&gt;
+&lt;p&gt;The wiring of stimulus into the Rails 6 way of handling JavaScript did trigger a bit of research and the following seems to be a clean setup and that setup included added a controllers folder to the app/javascript folder to be the entry point for user actions in the browser.&lt;/p&gt;
+
+&lt;p&gt;First, use yarn or npm to add stimulus to your project:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yarn add stimulus
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Add a &lt;em&gt;controllers&lt;/em&gt; directory to app/javascript.
+In your app/javascript/packs/application.js import the &lt;em&gt;controllers&lt;/em&gt; directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;// app/javascript/packs/application.js
+import &quot;controllers&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add an index.js to that directory with the following (reference stimulus docs for updates):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;//  app/javascript/controllers/index.js
+import { Application } from &quot;stimulus&quot;
+import { definitionsFromContext } from &quot;stimulus/webpack-helpers&quot;
+
+const application = Application.start()
+const context = require.context(&quot;.&quot;, true, /\.js$/)
+
+application.load(definitionsFromContext(context))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;stimulus-mvc&quot;&gt;Stimulus MVC&lt;/h2&gt;
+&lt;p&gt;The data- attributes used on HTML elements map provide a straightforward mapping and can be used in JavaScript controllers that will be created for the application.&lt;/p&gt;
+
+&lt;h3 id=&quot;view&quot;&gt;View&lt;/h3&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class= &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-controller=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;message&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;message.result&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;message.content&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type = &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-action=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;click-&amp;gt;message#send&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Send Message&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Note, the data_controller=”message” will be wired to the controller &lt;em&gt;app/javascript/controllers/message_controller.js&lt;/em&gt;.  The data-target DOM elements will be accessible in the controller.&lt;/p&gt;
+
+&lt;h3 id=&quot;javascript-controller&quot;&gt;JavaScript Controller&lt;/h3&gt;
+
+&lt;p&gt;The setup so far will get your request into the browsers JavaScript execution. The next step to do something in your application is to make a request to your backend server. There are several ways can do using jquery and other librarys and instead of adding more node modules I went with using the now include &lt;em&gt;fetch&lt;/em&gt; function. This seems like a good choice for this use case as there is minimal overhead. There was one issue that was run into.&lt;/p&gt;
+
+&lt;p&gt;app/javascript/controllers/message_controller.js&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;import { Controller } from &quot;stimulus&quot;
+
+export default class extends Controller {
+  static targets = [&quot;content&quot;, &quot;result&quot;]
+
+  async send() {
+    const csrfToken = document.head.querySelector(`meta[name=&quot;csrf-token&quot;]`).getAttribute(&quot;content&quot;)
+    const messageContent = this.Content
+    let resultMessage = &quot;&quot;
+
+    let response = await fetch('/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        'X-CSRF-Token': csrfToken
+      },
+      body: `{&quot;message&quot;: &quot;${this.contentTarget.value}&quot;}`,
+    });
+
+    if (response.ok) {
+      resultMessage = &quot;Thank you for the message!&quot;
+    } else {
+      console.log(&quot;HTTP-Error: &quot; + response.status);
+      resultMessage = &quot;There was an error sending your message.&quot;
+    }
+
+    this.resultTarget.innerHTML = resultMessage
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;csrf&quot;&gt;CSRF&lt;/h3&gt;
+&lt;p&gt;The CSRF token is required, and should not be disabled, to successfully talk to your Rails Controller. Your Rails controller is still doing your heavy lifting. The initial attempts to talk to yoBefore the request successfully arrived to the rails server an error was encountered related to Cross Site Request Forgery.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ActionController::InvalidAuthenticityToken &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ActionController::InvalidAuthenticityToken&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The previously rendered page has the CSRF Token available in the header and is accessible in from the Stimulus JavaScript controller. You will likely see the following error:&lt;/p&gt;
+
+&lt;p&gt;The following line will retrieve csrf-token from the rendered page:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;const csrfToken = document.head.querySelector(`meta[name=&quot;csrf-token&quot;]`).getAttribute(&quot;content&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the request you construct using fetch, provide that value as one of the header values:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;headers: {
+  'Content-Type': 'application/json;charset=utf-8',
+  'X-CSRF-Token': csrfToken
+},
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The addition of the csrf token will result in a successful POST request to your Rails controller and the ability to create and modify.&lt;/p&gt;
+
+&lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
+&lt;p&gt;This was a very quick and minimal, yet powerful, add to the application. The availability of the fetch method made the more minimal by not needing to include another library to initiate the HTTP Request back to the server. This approach seems to provide a great deal of runway for your application before moving to more complex solutions without sacrificing on the usability of your application.&lt;/p&gt;
+
+&lt;h1 id=&quot;references&quot;&gt;References&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;https://stimulusjs.org/&lt;/li&gt;
+  &lt;li&gt;https://longliveruby.com/articles/rails-6-stimulus-js&lt;/li&gt;
+  &lt;li&gt;https://en.wikipedia.org/wiki/Cross-site_request_forgery&lt;/li&gt;
+  &lt;li&gt;https://blog.nvisium.com/understanding-protectfromforgery&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">The process of adding AJAX calls to a Rails application generally results in adding a few hefty libraries to your apps especially if the result is a framework being added to handle dynamic user interactions. The Rails 6 + Stimulus + Turbolinks advertises a lightweight approach to provide dynamic user interactions and the advertising did lives up to its billing. Stimulus provides a very small footprint, short setup time, and straightforward view and controller wiring to add dynamic user interactions to your application.</summary></entry><entry><title type="html">How to Have Terrific One on Ones</title><link href="https://www.jakeschmitz.com/blog/2020/10/29/one-on-ones.html" rel="alternate" type="text/html" title="How to Have Terrific One on Ones" /><published>2020-10-29T06:32:00-05:00</published><updated>2020-10-29T06:32:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/10/29/one-on-ones</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/10/29/one-on-ones.html">&lt;h2 id=&quot;terrific-one-on-ones&quot;&gt;Terrific One on Ones&lt;/h2&gt;
+
+&lt;p&gt;One on ones are a great means to get to know your direct reports and build trust between each other and the organization. The flexible and frequent format enables you to keep building trust over time. When you have trusted communications between you and your direct report the opportunity exists to have challenging conversations sooner rather than later and solve smaller problems vs festering long term large issues.&lt;/p&gt;
+
+&lt;p&gt;Your role as a manager to be a helpful guide for your direct report. You don’t need to have all the answers at your fingertips, you are there to have discussions and provide approaches that will lead to great outcomes. One on ones will provide the time you need to have those discussions and help have conversations that will arrive at great outcomes.&lt;/p&gt;
+
+&lt;h2 id=&quot;schedule&quot;&gt;Schedule&lt;/h2&gt;
+&lt;p&gt;The schedule you create and adhere is an important part of the messaging to your direct report.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Weekly for 30 minutes is recommended&lt;/li&gt;
+  &lt;li&gt;Be on time&lt;/li&gt;
+  &lt;li&gt;Reschedule infrequently&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The schedule you create sets an expectation of the attention your direct report will receive. Not meeting these expectations on a frequent basis will erode trust that is built.&lt;/p&gt;
+
+&lt;h2 id=&quot;agenda&quot;&gt;Agenda&lt;/h2&gt;
+
+&lt;p&gt;The agenda can be very flexible and format that I have found to be most effect is:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Small Talk (get to know folks!)&lt;/li&gt;
+  &lt;li&gt;Direct Report Topics&lt;/li&gt;
+  &lt;li&gt;Manager Topics&lt;/li&gt;
+  &lt;li&gt;Career discussion (time permitting)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The ordered priority is important and if the scheduled meeting time for the one on one only covers the direct reports priorities that is ok, follow ups can be scheduled for further discussion. The important part of the one on one is that the direct report has the opportunity to discuss anything that is top of mind.&lt;/p&gt;
+
+&lt;h2 id=&quot;in-the-meeting&quot;&gt;In the Meeting&lt;/h2&gt;
+&lt;p&gt;Arriving on time, on schedule, prepared to talk is half the battle. The time you have during the one on one is important to provide your full attention to your direct report.&lt;/p&gt;
+
+&lt;h4 id=&quot;be-engaged&quot;&gt;Be engaged.&lt;/h4&gt;
+&lt;p&gt;This time is important to build trust and if you are multi-tasking this is conveying the wrong message. Be fully present.&lt;/p&gt;
+
+&lt;h4 id=&quot;be-curious&quot;&gt;Be curious.&lt;/h4&gt;
+&lt;p&gt;This is a an opportunity for you to ask questions and let your report share and for you to listen. Ask How and Why Questions and label responses to have an engaging conversation.&lt;/p&gt;
+
+&lt;h4 id=&quot;be-a-guide&quot;&gt;Be a guide.&lt;/h4&gt;
+&lt;p&gt;This one may be the toughest part for engineering managers that are solution oriented. There are times to stop providing solutions and to ask leading questions to help folks arrive at their own solutions.&lt;/p&gt;
+
+&lt;h4 id=&quot;stay-focused&quot;&gt;Stay focused.&lt;/h4&gt;
+&lt;p&gt;On occasion, this time can be used to solve project &amp;amp; customer problems but if that pattern persists schedule a separate time to talk through project problems. Keep this time available for the direct report and the attention focused on them.&lt;/p&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;One on Ones can be very enjoyable time for you and your direct report to stay caught up and provides a baseline of trust for both persons for the long term. Your role as a curious guide is important to help your direct report learn and take their career in a direction your direct report is interested in.&lt;/p&gt;</content><author><name></name></author><summary type="html">Terrific One on Ones</summary></entry><entry><title type="html">Set up Google Credentials for your Heroku Application</title><link href="https://www.jakeschmitz.com/blog/2020/09/16/set-heroku-google-credentials.html" rel="alternate" type="text/html" title="Set up Google Credentials for your Heroku Application" /><published>2020-09-16T05:52:00-05:00</published><updated>2020-09-16T05:52:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/09/16/set-heroku-google-credentials</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/09/16/set-heroku-google-credentials.html">&lt;p&gt;When using &lt;a href=&quot;https://cloud.google.com/&quot;&gt;Google Cloud&lt;/a&gt; with your application running &lt;a href=&quot;https://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt; there is a small challenge regarding storing Google Credentials. Google Cloud provides you with a google-credentials.json file that contains your Google connection information. When developing locally, an environment variable points at the file and when using Heroku pointing an environment variable directly at a file is not an option. Not to worry, the work around steps are below.&lt;/p&gt;
+
+&lt;p&gt;The following steps can be taken to add your Google Credentials to Heroku:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Add the &lt;a href=&quot;https://elements.heroku.com/buildpacks/buyersight/heroku-google-application-credentials-buildpack&quot;&gt;Google Credentials Buildpack&lt;/a&gt; to your Heroku app&lt;/li&gt;
+  &lt;li&gt;Set a &lt;em&gt;GOOGLE_CREDENTIALS&lt;/em&gt; and &lt;em&gt;GOOGLE_APPLICATION_CREDENTIALS&lt;/em&gt; environment variables for your Heroku app&lt;/li&gt;
+  &lt;li&gt;Redeploy your application to Heroku&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;heroku-google-credentials-buildpacks&quot;&gt;Heroku Google Credentials Buildpacks&lt;/h2&gt;
+&lt;p&gt;First, add a Heroku build pack to your project. There were a few buildpacks that were available that appeared to do the same thing and my first choice did not work. This one did:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;https://elements.heroku.com/buildpacks/buyersight/heroku-google-application-credentials-buildpack&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To install the buildpack in your project you can do the following:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;heroku buildpacks:set https://github.com/buyersight/heroku-google-application-credentials-buildpack.git &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; your-app-name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;set-heroku-environment-variables&quot;&gt;Set Heroku Environment Variables&lt;/h2&gt;
+&lt;p&gt;After installing the buildpack is added to your project set the following environment variables.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;heroku config:set &lt;span class=&quot;nv&quot;&gt;GOOGLE_CREDENTIALS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'&amp;lt;copy &amp;amp; paste the json contents of your google-credentials.json here'&lt;/span&gt;
+heroku config:set &lt;span class=&quot;nv&quot;&gt;GOOGLE_APPLICATION_CREDENTIALS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'google-credentials.json'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;push-a-new-release&quot;&gt;Push a New Release&lt;/h2&gt;
+&lt;p&gt;Push another deploy to Heroku and the buildpack will be added enabling your Google Cloud service.&lt;/p&gt;</content><author><name></name></author><summary type="html">When using Google Cloud with your application running Heroku there is a small challenge regarding storing Google Credentials. Google Cloud provides you with a google-credentials.json file that contains your Google connection information. When developing locally, an environment variable points at the file and when using Heroku pointing an environment variable directly at a file is not an option. Not to worry, the work around steps are below.</summary></entry><entry><title type="html">Book Review: Nine Lies About Work</title><link href="https://www.jakeschmitz.com/blog/2020/08/17/book-review-nine-lies-about-work.html" rel="alternate" type="text/html" title="Book Review: Nine Lies About Work" /><published>2020-08-17T06:16:00-05:00</published><updated>2020-08-17T06:16:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/08/17/book-review-nine-lies-about-work</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/08/17/book-review-nine-lies-about-work.html">&lt;p&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/40086702-nine-lies-about-work?ac=1&amp;amp;from_search=true&amp;amp;qid=MGQWTMoLL0&amp;amp;rank=1&quot;&gt;Nine Lies About Work, &lt;em&gt;A Freethinking Leader’s Guide to the Real World&lt;/em&gt;&lt;/a&gt; is true to its title, it has nine work place conventional wisdom items that the authors identify as not so true. The nine lies create a quick read and there are several concepts that I identified with based on my experiences:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Local teams matter most&lt;/li&gt;
+  &lt;li&gt;Cascading goals is challenging&lt;/li&gt;
+  &lt;li&gt;People need positive feedback&lt;/li&gt;
+  &lt;li&gt;Play to peoples strengths&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;A chapter that stood out to action on and apply is &lt;em&gt;The Best Plan Wins&lt;/em&gt;. The story of Operation and Intelligence (O &amp;amp; I) two hour meeting is fascinating for someone who generally avoids frequent meetings and with many people. I’m interested to apply this concept in a yet to be determined form.&lt;/p&gt;
+
+&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Lie&lt;/th&gt;
+      &lt;th&gt;Notes&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;People care which company they work for&lt;/td&gt;
+      &lt;td&gt;People care about their most localized team, those people in the team and the culture and rituals of that team&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;The best plan wins&lt;/td&gt;
+      &lt;td&gt;The best intelligence wins. Share as much information as possible. Determine what data is most useful. Trust people to use the data. Reverse the normal paradigm. Leaders provide information and people use that information to make decisions.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;The best companies cascade goals&lt;/td&gt;
+      &lt;td&gt;The best companies cascade meaning. Work is ahead of you, goals are behind you. Work is specific and detailed; goals are abstract. Work changes fast; goals change slowly or not at all. Work makes you feel like you have agency; goals make you feel like a cog in a machine. Work makes you feel trusted; goals make you fell distrusted. Work is work; goals aren’t.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;The best people are well rounded&lt;/td&gt;
+      &lt;td&gt;Messi uses his left foot in a 10:1 ratio. Focus on strengths; activities that make you feel good / find joy in. The successes you find will create positive feedback loop for and you’ll develop a deep skill.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;People need feedback&lt;/td&gt;
+      &lt;td&gt;People need attention. Frequency is more important than quality of one on ones. Positive attention is 30 times more motivating than negative attention. Positive future focused attention gives your brain access to more regions of itself and thus sets you up for greater learning.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;People can reliably rate other people&lt;/td&gt;
+      &lt;td&gt;Talent and performance reviews are challenging. Generally, bad data is generated. There are approaches to create questions that can be answered in ways to create better / good data.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;People have potential&lt;/td&gt;
+      &lt;td&gt;All people have potential. People have a current momentum. How can momentum be used to level up skills?&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Work Life balance matters most&lt;/td&gt;
+      &lt;td&gt;The dichotomy that work hours will be ‘survived’ and not work hours are enjoyed is false. Finding what you enjoy in your work is most important. Many people have the opportunity to find what they enjoy and do not take advantage of that opportunity. Take the initiative to find what you enjoy and create an environment that enables you to thrive. As a manager, helping folks find their niche or passions is highly rewarding.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Leadership is a thing&lt;/td&gt;
+      &lt;td&gt;Leaders have many different traits. A commonality across leaders is that they have expertise in trait / skill and people will follow a person with an expertise.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</content><author><name></name></author><summary type="html">Nine Lies About Work, A Freethinking Leader’s Guide to the Real World is true to its title, it has nine work place conventional wisdom items that the authors identify as not so true. The nine lies create a quick read and there are several concepts that I identified with based on my experiences: Local teams matter most Cascading goals is challenging People need positive feedback Play to peoples strengths</summary></entry><entry><title type="html">Top 7 Leadership Books</title><link href="https://www.jakeschmitz.com/blog/2020/07/30/top-7-leadership-books.html" rel="alternate" type="text/html" title="Top 7 Leadership Books" /><published>2020-07-30T06:30:00-05:00</published><updated>2020-07-30T06:30:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/07/30/top-7-leadership-books</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/07/30/top-7-leadership-books.html">&lt;p&gt;My sister recently texted and asked for a list of good business books.  I was surprised how quickly I arrived at my top 7:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/40121378-atomic-habits?ac=1&amp;amp;from_search=true&amp;amp;qid=WnxhqnUsbm&amp;amp;rank=1&quot;&gt;Atomic Habits&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/313605.Getting_to_Yes?from_search=true&amp;amp;from_srp=true&amp;amp;qid=tto1WeokIG&amp;amp;rank=1&quot;&gt;Getting to Yes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/6899290-your-brain-at-work?ac=1&amp;amp;from_search=true&amp;amp;qid=HbpYnwpsYf&amp;amp;rank=1&quot;&gt;Your Brain at Work&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/27213329-grit?from_search=true&amp;amp;from_srp=true&amp;amp;qid=P1AGr8TdMf&amp;amp;rank=1&quot;&gt;Grit&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/416378.The_Leadership_Secrets_of_Colin_Powell?ac=1&amp;amp;from_search=true&amp;amp;qid=4NGN51ax9L&amp;amp;rank=1&quot;&gt;Colin Powells Secrets of Leadership&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/914211.Influencer_&quot;&gt;Influencer&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/48019.The_Effective_Executive?from_search=true&amp;amp;from_srp=true&amp;amp;qid=2bAB6he8ul&amp;amp;rank=1&quot;&gt;Effective Executive&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I had to go back and think about why these? I hadn’t thought about it too much previously so how did this just roll out pretty quickly?&lt;/p&gt;
+
+&lt;p&gt;Upon a bit of reflection, these are the most impactful and useful books when I look back. I’ve take concepts from each, applied and have had positive outcomes. Below is a brief description for each to see if you might want to check it out.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Title&lt;/th&gt;
+      &lt;th&gt;Why the read is impactful&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/40121378-atomic-habits?ac=1&amp;amp;from_search=true&amp;amp;qid=WnxhqnUsbm&amp;amp;rank=1&quot;&gt;Atomic Habits&lt;/a&gt;&lt;/td&gt;
+      &lt;td&gt;This is the foundation. Habits drive outcomes. This book will help you start the habits you want, and need, to get to the outcomes you want.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/313605.Getting_to_Yes?from_search=true&amp;amp;from_srp=true&amp;amp;qid=tto1WeokIG&amp;amp;rank=1&quot;&gt;Getting to Yes&lt;/a&gt;&lt;/td&gt;
+      &lt;td&gt;This negotiation book is not at all what I expected in a good way. Negotiation is great collaboration. Most people need to collaborate to be successful this read has approaches and tactics that are useful for you day to day. This may be #2 on my list but this may be where more of my focus will go.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/6899290-your-brain-at-work?ac=1&amp;amp;from_search=true&amp;amp;qid=HbpYnwpsYf&amp;amp;rank=1&quot;&gt;Your Brain at Work&lt;/a&gt;&lt;/td&gt;
+      &lt;td&gt;Your Brain at Work is a fascinating read. Why do the tactics presented in the other books work? This one has the answers on why your brain responds the way it does.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/27213329-grit?from_search=true&amp;amp;from_srp=true&amp;amp;qid=P1AGr8TdMf&amp;amp;rank=1&quot;&gt;Grit&lt;/a&gt;&lt;/td&gt;
+      &lt;td&gt;Take your habits and apply long term perseverance and you have great combination. Questions regarding grit and perseverance are great for hiring and I particularly like the Hard Thing Rule.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/416378.The_Leadership_Secrets_of_Colin_Powell?ac=1&amp;amp;from_search=true&amp;amp;qid=4NGN51ax9L&amp;amp;rank=1&quot;&gt;Colin Powells Secrets of Leadership&lt;/a&gt;&lt;/td&gt;
+      &lt;td&gt;The #1 concept I took away from this book is the importance of optimism and projecting optimism. Constructively critical is necessary while maintaining a positive outlook.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/914211.Influencer_&quot;&gt;Influencer&lt;/a&gt;&lt;/td&gt;
+      &lt;td&gt;Want to row your boat in one direction. Influencer can help you get there.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.goodreads.com/book/show/48019.The_Effective_Executive?from_search=true&amp;amp;from_srp=true&amp;amp;qid=2bAB6he8ul&amp;amp;rank=1&quot;&gt;Effective Executive&lt;/a&gt;&lt;/td&gt;
+      &lt;td&gt;Know thy time, get the right things done, only outcomes matter are good tidbits from Drucker to become and remain successful.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;As you check start to check out some of these reads, it is a lot of fun to weave a new approaches into your day to day life and figure what will work for you. It’s also fun to become aware of and identify successful approaches that and see if they may work for you too. These have helped me learn a bit more everyday, have little bit better conversations, keep improving results and having fun everyday. I hope a few these might have good impacts for you as well!&lt;/p&gt;</content><author><name></name></author><summary type="html">My sister recently texted and asked for a list of good business books. I was surprised how quickly I arrived at my top 7: Atomic Habits Getting to Yes Your Brain at Work Grit Colin Powells Secrets of Leadership Influencer Effective Executive</summary></entry><entry><title type="html">Productivity: Ngrok subdomain replace</title><link href="https://www.jakeschmitz.com/blog/2020/06/04/ngrok-subdomain-replace.html" rel="alternate" type="text/html" title="Productivity: Ngrok subdomain replace" /><published>2020-06-04T06:28:00-05:00</published><updated>2020-06-04T06:28:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/06/04/ngrok-subdomain-replace</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/06/04/ngrok-subdomain-replace.html">&lt;p&gt;The mornings I’m working with FreeClimb at some point in my testing an ngrok connection is needed to be set up for my local test environment. This results in creating new ngrok tunnel, updating my FreeClimb webhook urls on my dashboard and then updating my local app environment variables used for callbacks from FreeClimb. This procedure has been executed more than twice so being a good lazy developer I wrote a little script to expedite the procedure and thought other folks may find it useful.&lt;/p&gt;
+
+&lt;p&gt;The script is posted as a &lt;a href=&quot;https://gist.github.com/jschmitz/df4e1f33fd19f05726ed5c909e013d5c/&quot;&gt;public gist&lt;/a&gt; and, if its helpful, please modify and use as needed. The script, as written, requires a specific setup that I’ll describe.&lt;/p&gt;
+
+&lt;h2 id=&quot;ngrok&quot;&gt;Ngrok&lt;/h2&gt;
+&lt;p&gt;The script expects you to be using Basic Auth with your ngrok connection.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ngrok http &lt;span class=&quot;nt&quot;&gt;--auth&lt;/span&gt; user:pass 3000
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You are creating a tunnel into your machine so you might as well not be the least secure person out there. Also, I explicitly severe the connection when I am completed with my testing.&lt;/p&gt;
+
+&lt;h2 id=&quot;setup-environment-variables&quot;&gt;Setup Environment Variables&lt;/h2&gt;
+&lt;p&gt;The script needs the following environment variables created before execution:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Environment Variable&lt;/th&gt;
+      &lt;th&gt;Description&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;FREECLIMB_ACCOUNT_ID&lt;/td&gt;
+      &lt;td&gt;Your FreeClimb account id. Obtain from your FreeClimb Dashboard. This is used in the curl request to FreeClimb.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;FREECLIMB_ACCOUNT_TOKEN&lt;/td&gt;
+      &lt;td&gt;Your FreeClimb account id. Obtain from your FreeClimb Dashboard. This is used in the curl request to FreeClimb.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;YOUR_APP_PUBLIC_URL&lt;/td&gt;
+      &lt;td&gt;This is the public url ngrok provides. The format must be: ‘http://username:password@subdomain.ngrok.io”&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;YOUR_APP_APPLICATION_ID&lt;/td&gt;
+      &lt;td&gt;Your FreeClimb application id. Obtain from your FreeClimb Dashboard. This is used in the curl request to FreeClimb.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;You can name these anything, update the script to match your names.&lt;/p&gt;
+
+&lt;h2 id=&quot;update-freeclimb-webhooks&quot;&gt;Update FreeClimb Webhooks&lt;/h2&gt;
+&lt;p&gt;The script currently &lt;a href=&quot;https://docs.freeclimb.com/reference/applications#update-an-application&quot;&gt;updates your FreeClimb Application&lt;/a&gt; voiceURL (&lt;a href=&quot;https://docs.freeclimb.com/reference/calls-2#inbound&quot;&gt;inbound call webhook&lt;/a&gt;) and smsUrl (&lt;a href=&quot;https://docs.freeclimb.com/reference/sms-2#messagedelivery-1&quot;&gt;messageDelivery webhook&lt;/a&gt;). You may need to add or remove FreeClimb Application attributes being updated to fit your applications needs.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;voiceUrl&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$new_public_url&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/inbound_calls&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;smsUrl&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$new_public_url&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/inbound_messages&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;}&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$KMS_CONF_USERNAME&lt;/span&gt;:&lt;span class=&quot;nv&quot;&gt;$KMS_CONF_PASSWORD&lt;/span&gt; https://freeclimb.com/apiserver/Accounts/&lt;span class=&quot;nv&quot;&gt;$KMS_CONF_USERNAME&lt;/span&gt;/Applications/&lt;span class=&quot;nv&quot;&gt;$KMS_CONF_APPLICATION_ID&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;execution&quot;&gt;Execution&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Set your permissions to execute (see the first reference link)&lt;/li&gt;
+  &lt;li&gt;Pass in the subdomain&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Time to run the script. I copy the subdomain from the ngrok terminal and paste to pass the new subdomain to the script:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; ./ngork_update newNgrokSubdomainPasted
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The leading period will execute the script in the current shell vs. a sub shell. If the script is executed in a subshell] when you start your application in the current shell the environment variable will remain unchanged.&lt;/p&gt;
+
+&lt;p&gt;And done! You’re all set to go to start making calls and sending messages to your local test environment.&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+&lt;p&gt;I don’t make Bash Scripts on a daily basis so I found the need to google a bunch of stuff. The list of resources I used is below and these could help you further modify and extend the example script.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;https://www.taniarascia.com/how-to-create-and-use-bash-scripts/&lt;/li&gt;
+  &lt;li&gt;https://www.lifewire.com/pass-arguments-to-bash-script-2200571&lt;/li&gt;
+  &lt;li&gt;https://stackoverflow.com/questions/18547881/shell-script-to-set-environment-variables&lt;/li&gt;
+  &lt;li&gt;https://linuxhint.com/curl_bash_examples/&lt;/li&gt;
+  &lt;li&gt;https://stackoverflow.com/questions/13210880/replace-one-substring-for-another-string-in-shell-script&lt;/li&gt;
+  &lt;li&gt;https://stackoverflow.com/questions/9741433/appending-a-line-break-to-an-output-file-in-a-shell-script&lt;/li&gt;
+  &lt;li&gt;https://stackoverflow.com/questions/14744904/how-to-execute-script-in-the-current-shell-on-linux&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">The mornings I’m working with FreeClimb at some point in my testing an ngrok connection is needed to be set up for my local test environment. This results in creating new ngrok tunnel, updating my FreeClimb webhook urls on my dashboard and then updating my local app environment variables used for callbacks from FreeClimb. This procedure has been executed more than twice so being a good lazy developer I wrote a little script to expedite the procedure and thought other folks may find it useful.</summary></entry><entry><title type="html">Why 5AM? - The Morning Routine</title><link href="https://www.jakeschmitz.com/blog/2020/06/01/morning-routine.html" rel="alternate" type="text/html" title="Why 5AM? - The Morning Routine" /><published>2020-06-01T06:58:34-05:00</published><updated>2020-06-01T06:58:34-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/06/01/morning-routine</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/06/01/morning-routine.html">&lt;p&gt;My alarm is set for 5AM six days a week except Sunday. Why in the world would I do that to myself? For me, 5am to 7am time-frame is the time of the day, most days, where the house is quiet and I consistently can make choices about how I spend about two hours. The rest of the day, at home and at work, my time is, for the most part, dedicated to those around me or has a high likelihood of interruption. The 5am alarm enables me to spend time on a few areas that are important to me on a daily basis.&lt;/p&gt;
+
+&lt;p&gt;Why do I get up at 5am?  Because I enjoy what I’m doing during the time.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-did-i-get-started&quot;&gt;How did I get started?&lt;/h2&gt;
+&lt;p&gt;First, I decided early mornings work better for me than the equivalent hours staying up late. I tried late first and being the software world many of my peers trend towards late nights. The late nights didn’t work for me, my sleep was very poor and I just didn’t feel very good. I also want to exercise consistently and I found that with an after work schedule I had trouble with skipping. I went to early mornings about six years ago and the process of discovery and adjustment took me a substantial amount of time to change my schedule. There were many adjustments and failed attempts before arriving at a consistent 5am wake up time. It’s early.&lt;/p&gt;
+
+&lt;p&gt;Why 5am? It works better for how I’m wired and what I want to do.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-night-routine&quot;&gt;The Night Routine&lt;/h2&gt;
+&lt;p&gt;The night before is critical to get into the habit of waking up early. I have arrived at a checklist to make the morning easy and efficient. Most importantly, I get to sleep in the 9:00 hour so I am still getting a solid number of hours of sleep. My night before list includes&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Get clothes out for the morning and into office (minimize disruption)&lt;/li&gt;
+  &lt;li&gt;Get the coffee ready&lt;/li&gt;
+  &lt;li&gt;Know what I’m going to do (code, write, read)&lt;/li&gt;
+  &lt;li&gt;Plan exercise&lt;/li&gt;
+  &lt;li&gt;Read physical book or Kindle Paperwhite (sometimes TV, no phones or computers)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The coffee pot is programmed to start at 5:05am and this helps me roll out of bed too and that rolling about of bed is still a challenge, but the coffee being ready helps to drag out of bed.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-morning-routine&quot;&gt;The Morning Routine&lt;/h2&gt;
+&lt;p&gt;I set a wrist vibration alarm, a Fitbit, to try and cause as little disrupting as possible getting out of bed. Earlier is better here from a disruption stand point. Later times of even 5:30 or 6:00 result in other folks hearing me rustle about and then getting up. This leads to a couple of less desirable outcomes, my expectations of quiet time are not met, others have less sleep and that leads to stress later in the day.&lt;/p&gt;
+
+&lt;p&gt;Why 5am? I don’t disrupt others in the house and if I do they go back to sleep.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-i-do&quot;&gt;What I do&lt;/h2&gt;
+&lt;p&gt;I focus on three things important to me to start the day:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Creating&lt;/li&gt;
+  &lt;li&gt;Exercise&lt;/li&gt;
+  &lt;li&gt;Family Time&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;On most days, I am getting all three of those accomplished before 9am, so I’ve had a great day already and the rest is gravy.&lt;/p&gt;
+
+&lt;h3 id=&quot;creating---coding-or-writing&quot;&gt;Creating - Coding or Writing&lt;/h3&gt;
+&lt;p&gt;I start at the computer. I want to make tangible progress on a project I’m working on. If I’m building software I want to get a commit done or a tiny feature completed. If I’m writing I’d like to get a post done or make something better that has tangible result I can, again, commit to Github.&lt;/p&gt;
+
+&lt;p&gt;My Github profile is my indication that I’m getting a few things done. I don’t get a commit in everyday, some days don’t make sense, some days I sleep in or whatever. No big deal, just want to see activity there and a bunch of green days.&lt;/p&gt;
+&lt;h3 id=&quot;exercise&quot;&gt;Exercise&lt;/h3&gt;
+&lt;p&gt;Between 6:30 and 7:00 I go to exercise. I started writing a bunch on this and I’ll move that to its own post. I’ll try to get about 30 minutes daily and alternate intensity days with lower intensity stretch days. One day I’ll find a way to run, do burpees and pull ups. The next day I’ll do yoga (yes I started Yoga and it’s great!). I’ll add more in another post.&lt;/p&gt;
+
+&lt;h3 id=&quot;family-time&quot;&gt;Family Time&lt;/h3&gt;
+&lt;p&gt;By 7:30 I’m having breakfast with the fam. I’ll try to get the kids to do something with me and that is hit or miss. I’m working on more activities during this timeframe and less cartoons. We started walks and bike rides and that’s great.&lt;/p&gt;
+
+&lt;p&gt;I’ll hang out till about 9:00 and then on weekdays get going for my day at the office.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-did-i-give-up&quot;&gt;What did I give up?&lt;/h2&gt;
+&lt;p&gt;Mainly TV. I do watch a few shows occasionally. I wouldn’t really say I’m missing TV either. I’ll find time for a series I really want to watch or catch up on social crazes like the Tiger King (have craze nearby Tiger King seems appropriate). So not zero TV, just not much.&lt;/p&gt;
+
+&lt;p&gt;Also, zero commuting. This includes going to an office, the gym or other locations consistently. Commute time for anything adds up.&lt;/p&gt;
+
+&lt;h2 id=&quot;closing-thoughts&quot;&gt;Closing Thoughts&lt;/h2&gt;
+&lt;p&gt;The most recent schedule adjustment was triggered by the pandemic and beginning to work at home. I previously commuted to the office on a daily basis and would exercise, help the family get out the door (chaos!), commute and then get in front of a computer. That led to getting into the day to day right away. The switch in order to start with important and non urgent career development time, I suspect, will lead to good outcomes in the long term and in the short term I’m excited to be making progress on projects I’ve been wanting to accomplish.&lt;/p&gt;
+
+&lt;p&gt;The process to arrive at what I am currently doing in the morning has taken years of adjusting to my changing environment and constraints to arrive where it is today. My experience has been positive using the early morning schedule for multiple years and the current iteration seems to be particularly great for me. If you’re looking to get into an early morning routine, make it your own, keep adjusting and figure out what works for you!&lt;/p&gt;</content><author><name></name></author><summary type="html">My alarm is set for 5AM six days a week except Sunday. Why in the world would I do that to myself? For me, 5am to 7am time-frame is the time of the day, most days, where the house is quiet and I consistently can make choices about how I spend about two hours. The rest of the day, at home and at work, my time is, for the most part, dedicated to those around me or has a high likelihood of interruption. The 5am alarm enables me to spend time on a few areas that are important to me on a daily basis.</summary></entry><entry><title type="html">Play Audio in FreeClimb - Convert mp3 to 8 bit mono U-Law</title><link href="https://www.jakeschmitz.com/blog/2020/05/21/play-audio-in-freeclimb-convert-mp3-to-8-bit-mono-u-law.html" rel="alternate" type="text/html" title="Play Audio in FreeClimb - Convert mp3 to 8 bit mono U-Law" /><published>2020-05-21T05:17:00-05:00</published><updated>2020-05-21T05:17:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/05/21/play-audio-in-freeclimb-convert-mp3-to-8-bit-mono-u-law</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/05/21/play-audio-in-freeclimb-convert-mp3-to-8-bit-mono-u-law.html">&lt;p&gt;When communicating with your users over the phone some users do love the robot voice that Text to Speech (TTS) provides and that is a great option from a developer point of view. It’s easy to control and update by just changing a string and you get a new message. No muss no fuss.&lt;/p&gt;
+
+&lt;p&gt;There likely will come a time when the user base expects more than a robot voice and to take it up a notch you’ll need begin to provide pre-recorded audio. Pre-recorded audio can be provided for hold music as well as conversational audio. We’ll check out how to get files into the right format with FreeClimb next.&lt;/p&gt;
+
+&lt;p&gt;FreeClimb supports playback of single-channel 8 kHz 8-bit μ-law WAV files. When creating your generating or procuring your own audio you might run into a need to change the format to meet that requirement. You can start by getting an audio editor like &lt;a href=&quot;https://www.audacityteam.org/&quot;&gt;Audacity&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;These steps should get you the file format you need:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Import the audio file to convert in your Audacity
+    &lt;ol&gt;
+      &lt;li&gt;Drag it into the editor&lt;/li&gt;
+      &lt;li&gt;or&lt;/li&gt;
+      &lt;li&gt;File –&amp;gt; Import –&amp;gt; Audio&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Ensure you have a mono track
+    &lt;ol&gt;
+      &lt;li&gt;Track&lt;/li&gt;
+      &lt;li&gt;Mix&lt;/li&gt;
+      &lt;li&gt;Mix Stereo Down to Mono&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Resample
+    &lt;ol&gt;
+      &lt;li&gt;Tracks&lt;/li&gt;
+      &lt;li&gt;New Sample Rate –&amp;gt; 8000&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Export to the supported file format
+    &lt;ol&gt;
+      &lt;li&gt;File&lt;/li&gt;
+      &lt;li&gt;Export as Wav&lt;/li&gt;
+      &lt;li&gt;Other Uncompressed Files&lt;/li&gt;
+      &lt;li&gt;Header –&amp;gt; WAV (Microsoft)&lt;/li&gt;
+      &lt;li&gt;Encoding –&amp;gt; U-Law&lt;/li&gt;
+      &lt;li&gt;Save&lt;/li&gt;
+      &lt;li&gt;Export&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Want to see this visually?  Check out &lt;a href=&quot;https://www.youtube.com/watch?v=CeiJtLs1mJ0&quot;&gt;this video&lt;/a&gt; to see the process in action.&lt;/p&gt;
+
+&lt;p&gt;With that, you have a file to host in your application that FreeClimb will play.&lt;/p&gt;</content><author><name></name></author><summary type="html">When communicating with your users over the phone some users do love the robot voice that Text to Speech (TTS) provides and that is a great option from a developer point of view. It’s easy to control and update by just changing a string and you get a new message. No muss no fuss.</summary></entry><entry><title type="html">Quick Conference Setup on FreeClimb</title><link href="https://www.jakeschmitz.com/blog/2020/05/11/freeclimb-quick-conference.html" rel="alternate" type="text/html" title="Quick Conference Setup on FreeClimb" /><published>2020-05-11T05:58:00-05:00</published><updated>2020-05-11T05:58:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/05/11/freeclimb-quick-conference</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/05/11/freeclimb-quick-conference.html">&lt;p&gt;How can you enable your users to have conversations? This post will show how to provide conversations programmatically with your applications and we’ll start by creating the most minimal conference we can on &lt;a href=&quot;www.freeclimb.com&quot;&gt;FreeClimb&lt;/a&gt;. A prerequisite is a previous post &lt;a href=&quot;https://jakeschmitz.com/blog/ruby/rails/freeclimb/2020/04/15/inbound-freeclimb-call.html&quot;&gt;Receiving a phone call from FreeClimb&lt;/a&gt;, if you haven’t completed the steps in that post you’ll need to in order to complete setting up a conference. The resources needed to complete the steps in this post will be:&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;One &lt;a href=&quot;https://docs.freeclimb.com/reference/conferences&quot;&gt;FreeClimb Conference&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Two phone calls&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The diagram to connect two calls is much appears much more complex than the code required. We’ll break it down as we go as well too.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.jakeschmitz.com/blog/assets/diagrams/quick_conference_full.svg&quot; alt=&quot;Incoming Call Sequence Diagram&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You’ll notice that the two callers into FreeClimb both end up in a FreeClimb conference and when callers are in a started conference they will be able to talk to each other.&lt;/p&gt;
+
+&lt;h2 id=&quot;create-freeclimb-conference&quot;&gt;Create FreeClimb Conference&lt;/h2&gt;
+&lt;p&gt;FreeClimb conferences are persistent so you can re-use them as needed. This means that conferences can be created before phone calls arrive to your conference arrive. We will use the FreeClimb API to create a conference using curl.&lt;/p&gt;
+
+&lt;p&gt;Revisiting our sequence diagram we will complete these steps:
+&lt;img src=&quot;https://www.jakeschmitz.com/blog/assets/diagrams/quick_conference_curl.svg&quot; alt=&quot;Incoming Call Sequence Diagram&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;First, lets checkout the reference docs to &lt;a href=&quot;https://docs.freeclimb.com/reference/conferences#create-a-conference&quot;&gt;create a conference&lt;/a&gt;.  The curl in the example provided is:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;s2&quot;&gt;&quot;https://{api_url}/Accounts/{account_id}/Conferences&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;alias&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;playBeep&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;always&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:false, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;waitUrl&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://myapp/waitaudio&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;statusCallbackUrl&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;http://myserver/confstatuscallback&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;}&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{account_id}:{auth_token}&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When working with a command of this length I’ll put the string into a text editor, make adjustments, and copy and paste to the terminal. I find that easier than trying to edit the command in the terminal itself.&lt;/p&gt;
+
+&lt;p&gt;There are three keys in the curl command you will need to replace:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Key&lt;/th&gt;
+      &lt;th&gt;Replace with&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;api_url&lt;/td&gt;
+      &lt;td&gt;replace with www.freeclimb.com/apiserver&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;account_id&lt;/td&gt;
+      &lt;td&gt;Go to the dashboard, replace with your account_id (&lt;strong&gt;two replacements!&lt;/strong&gt;)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;auth_token&lt;/td&gt;
+      &lt;td&gt;Go to the dashboard, replace with your auth_token&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;When making your replacements, remove the curly braces. The only curly braces in the command should be associated with the data parameter (-d). If you leave them in with auth portion, after -u, you will receive &lt;em&gt;Unauthorized Error&lt;/em&gt; responses.  The waitUrl and statusCallbackUrl are also removed in the example below for simplicity.&lt;/p&gt;
+
+&lt;p&gt;Your curl command should looks something like this after completing your adjustments:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;s2&quot;&gt;&quot;https://www.freeclimb.com/apiserver/Accounts/AC5asdf345321421442412sfsdvsgd/Conferences&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;alias&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Jakes test Conference&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;playBeep&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;always&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:false }&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;AC5asdf345321421442412sfsdvsgd:bsdf214sadsfasfdsfasfasfasffht&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You will have a &lt;em&gt;conferenceId&lt;/em&gt; returned in the response and we’re going to need that for our next step.&lt;/p&gt;
+
+&lt;h2 id=&quot;connect-your-callers&quot;&gt;Connect Your Callers&lt;/h2&gt;
+&lt;p&gt;This portion builds off of the previous blog post Receiving a &lt;a href=&quot;https://jakeschmitz.com/blog/ruby/rails/freeclimb/2020/04/15/inbound-freeclimb-call.html&quot;&gt;Phone Call from FreeClimb&lt;/a&gt;. If you haven’t check that post out, please do so. From the previous post, you have a phone number available that is connected to your app that can receive many phone calls. We will apply the same behavior to all calls, with that N calls can arrive into the system and the processing will be:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.jakeschmitz.com/blog/assets/diagrams/quick_conference_one_caller.svg&quot; alt=&quot;Incoming Call Sequence Diagram&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The code we’ll add below will put all callers that call your number into a conference and enable those callers to talk to each other.&lt;/p&gt;
+
+&lt;p&gt;The next update will be to the InboundCallsController that you’ve already created. We’re going to use the &lt;em&gt;conferenceId&lt;/em&gt; we previously to host a conference. To do so, we’ll use PerCL, its JSON commands under the hood, to tell FreeClimb to add all calls received to the conference resource. The PerCL command to use is &lt;a href=&quot;https://docs.freeclimb.com/reference/conference-participants-1#addtoconference&quot;&gt;addToConference&lt;/a&gt; and that will be added to your HTTP Response back to FreeClimb. Start up your server and confirm your “Hello World” app is working. Then, update the response your providing:&lt;/p&gt;
+
+&lt;p&gt;The most minimal code in your controller would be:&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InboundCallsController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;ApplicationController&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Percl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;addToConference&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Percl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;AddToConference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;conferenceId_from_your_curl&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:callId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;addToConference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;json: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_json&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ensure your server is running and try out a couple of phone calls. The first call you’re going to get connected and hear silence, its a bit strange. The second call will trigger a beep in the conference and you’ll be connected and the two callers can chats. Success!&lt;/p&gt;
+
+&lt;h2 id=&quot;extra---remove-the-strange-initial-silence&quot;&gt;Extra! - Remove the strange initial silence&lt;/h2&gt;
+
+&lt;p&gt;First a bit of a greeting goes along way. You can add a greeting into your PerCl response&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;n&quot;&gt;say&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Percl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Say&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Hello, you're about to be added to a conference.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The string you provide will be read out, Text To Speech (TTS), to the caller upon arrival. After the greeting the caller will experience silence until another caller arrives. We can keep improving.&lt;/p&gt;
+
+&lt;p&gt;Next, we can add hold music for the intial caller(s). We can add folks into what many conferencing folks would call the &lt;em&gt;lobby&lt;/em&gt; by setting the startConfOnEnter attribute to false.&lt;/p&gt;
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;n&quot;&gt;addToConference&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Percl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;AddToConference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conference_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;call_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;addToConference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;startConfOnEnter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;false&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;addToConference&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If the conference is not started and &lt;em&gt;startConfOnEnter&lt;/em&gt; is set to false, callers will hear hold music. When placing callers into the lobby you’ll have to determine what you want to trigger a conference to start and add that logic. Perhaps a specific phone number calling in triggers the conference to start or a PIN being entered (checkout getDigits!)?  Up to you.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;You’ve created a conference call that is available to anyone that calls that number, pretty cool and also something you probably don’t want to keep running for the world :) Next try getting conferences created dynamically using the API and use your own logic to get folks into the lobby and then start the conference. You can keep adding building blocks of FreeClimb API along with other API services to make your app more and more awesome.&lt;/p&gt;</content><author><name></name></author><summary type="html">How can you enable your users to have conversations? This post will show how to provide conversations programmatically with your applications and we’ll start by creating the most minimal conference we can on FreeClimb. A prerequisite is a previous post Receiving a phone call from FreeClimb, if you haven’t completed the steps in that post you’ll need to in order to complete setting up a conference. The resources needed to complete the steps in this post will be: One FreeClimb Conference Two phone calls</summary></entry><entry><title type="html">Habits Drive Outcomes</title><link href="https://www.jakeschmitz.com/blog/2020/04/30/great-read-atomic-habits.html" rel="alternate" type="text/html" title="Habits Drive Outcomes" /><published>2020-04-30T06:16:00-05:00</published><updated>2020-04-30T06:16:00-05:00</updated><id>https://www.jakeschmitz.com/blog/2020/04/30/great-read-atomic-habits</id><content type="html" xml:base="https://www.jakeschmitz.com/blog/2020/04/30/great-read-atomic-habits.html">&lt;p&gt;I enjoy being productive. Learning, exercising, doing random things around the house. It drives my wife crazy sometimes but I really enjoy seeing things get done and I enjoy the process.&lt;/p&gt;
+
+&lt;p&gt;After having kids the productivity that I enjoyed dwindled. Studying dropped, less exercise, few side projects and tinkering around the house mostly disappeared. The good habits I had were no longer easy. Those habits didn’t fit our two kids and two career very busy reality. Gradually those habits went way.&lt;/p&gt;
+
+&lt;p&gt;Luckily, I’ve always been reader and started reading books about habits, influence, productivity and how your brain works. I’ve found those fascinating and I’ve gradually started to build back the learning, exercising and home projects I find enjoyable. It hasn’t been easy with several starts and stops. I’ve found I have three main challenges:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I overdo it at first&lt;/li&gt;
+  &lt;li&gt;I don’t give anything else up when I start something new&lt;/li&gt;
+  &lt;li&gt;I don’t make it easy (mostly due to the first item in the list)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I’ve found &lt;a href=&quot;https://jamesclear.com/atomic-habits&quot;&gt;Atomic Habits&lt;/a&gt; by James Clear to be a helpful read. It’s is all about how to build small habits, small being the keyword for me. One theme I’ve seen consistently is that habits and daily practices compound. I believe I’ve seen this over the years personally as well as with folks that are great at what they do. With that in mind, I believe the results achieve are a reflection of your daily habits.&lt;/p&gt;
+
+&lt;p&gt;Atomic Habits was a page turner for me that kept me engaged. The book touched on many of the main themes of habits as well as new thoughts to take away and apply. One of those new thoughts to me was your identity emerges out of your habits. If you want to complete an IronMan you become a triathlete. Your habit is part of your identity. Your habits, that may start small, change your beliefs about yourself and how others view you.&lt;/p&gt;
+
+&lt;p&gt;I traditionally over do new things I am trying to start. I start thinking about starting two a days exercising or writing everyday for an hour to get a blog started. A main takeaway for me is to start small and build up. Get a small workout and leave wanting more. Write a blog post every Saturday morning. Anticipation for more is important, leave your sessions wanting more and gain momentum.&lt;/p&gt;
+
+&lt;p&gt;To gain that momentum, a few suggestions are:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Declare your intention
+    &lt;ul&gt;
+      &lt;li&gt;I will [desired behavior] at [time] at [location]&lt;/li&gt;
+      &lt;li&gt;I will run at 6am on the trail&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Make it easy, add cues to your environment
+    &lt;ul&gt;
+      &lt;li&gt;Put your running clothes out&lt;/li&gt;
+      &lt;li&gt;Put your running shoes by the door&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Pair it with a current habit
+    &lt;ul&gt;
+      &lt;li&gt;Drink a coffee&lt;/li&gt;
+      &lt;li&gt;Go read a running blog&lt;/li&gt;
+      &lt;li&gt;Go run&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Make your competing distractions difficult
+    &lt;ul&gt;
+      &lt;li&gt;Hide your TV Remote and unplug the TV&lt;/li&gt;
+      &lt;li&gt;Default your phone to a running a app&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In the steps above, you see that making the things you want to do easy and the things you don’t want to do hard is part of the your system. Set up your environment to enable yourself to be on autopilot to do what you want and avoid what you don’t want to do. Environmental cues are strong influencers on your actions so lay out your clothes to exercise or book and make what you want to do easy.&lt;/p&gt;
+
+&lt;p&gt;When you first start it may seem that your new habit is working. Exercising is making you more tired, studying is not yielding the results you’re looking for. Atomic Habits uses the example of heat melting an ice cube, changes are not apparent until you reach a critical threshold and you see a melt occur. Stick with what you’re doing, all of a sudden you’ll notice the results.&lt;/p&gt;
+
+&lt;p&gt;The habits we have also reflect our social sphere of influence. We are wired to stay with the herd. The people you are closest with will determine the attractiveness of your behaviors. So if you want to be an awesome bowler, hang out with other bowlers.&lt;/p&gt;
+
+&lt;p&gt;Lastly, give yourself a reward for being successful. A little X or checkmark goes a long way in recognizing our own efforts because our brain prioritizes short term rewards.&lt;/p&gt;
+
+&lt;p&gt;A few other books I would recommend to achieve the outcomes you are looking for:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/dp/0061771295?tag=duckduckgo-d-20&amp;amp;linkCode=osi&amp;amp;th=1&amp;amp;psc=1&quot;&gt;Your Brain at Work&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/dp/0071808868?tag=duckduckgo-d-20&amp;amp;linkCode=osi&amp;amp;th=1&amp;amp;psc=1&quot;&gt;Influencer&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/Power-Habit-What-Life-Business/dp/081298160X&quot;&gt;Power of Habit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">I enjoy being productive. Learning, exercising, doing random things around the house. It drives my wife crazy sometimes but I really enjoy seeing things get done and I enjoy the process.</summary></entry></feed>

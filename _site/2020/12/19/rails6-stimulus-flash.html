@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Minimal AJAX with Stimulus, Rails 6 and JS HTTP POST Request using Fetch | Jake’s Blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Minimal AJAX with Stimulus, Rails 6 and JS HTTP POST Request using Fetch" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The process of adding AJAX calls to a Rails application generally results in adding a few hefty libraries to your apps especially if the result is a framework being added to handle dynamic user interactions. The Rails 6 + Stimulus + Turbolinks advertises a lightweight approach to provide dynamic user interactions and the advertising did lives up to its billing. Stimulus provides a very small footprint, short setup time, and straightforward view and controller wiring to add dynamic user interactions to your application." />
+<meta property="og:description" content="The process of adding AJAX calls to a Rails application generally results in adding a few hefty libraries to your apps especially if the result is a framework being added to handle dynamic user interactions. The Rails 6 + Stimulus + Turbolinks advertises a lightweight approach to provide dynamic user interactions and the advertising did lives up to its billing. Stimulus provides a very small footprint, short setup time, and straightforward view and controller wiring to add dynamic user interactions to your application." />
+<link rel="canonical" href="https://www.jakeschmitz.com/blog/2020/12/19/rails6-stimulus-flash.html" />
+<meta property="og:url" content="https://www.jakeschmitz.com/blog/2020/12/19/rails6-stimulus-flash.html" />
+<meta property="og:site_name" content="Jake’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-19T05:22:00-06:00" />
+<script type="application/ld+json">
+{"description":"The process of adding AJAX calls to a Rails application generally results in adding a few hefty libraries to your apps especially if the result is a framework being added to handle dynamic user interactions. The Rails 6 + Stimulus + Turbolinks advertises a lightweight approach to provide dynamic user interactions and the advertising did lives up to its billing. Stimulus provides a very small footprint, short setup time, and straightforward view and controller wiring to add dynamic user interactions to your application.","headline":"Minimal AJAX with Stimulus, Rails 6 and JS HTTP POST Request using Fetch","dateModified":"2020-12-19T05:22:00-06:00","datePublished":"2020-12-19T05:22:00-06:00","url":"https://www.jakeschmitz.com/blog/2020/12/19/rails6-stimulus-flash.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jakeschmitz.com/blog/2020/12/19/rails6-stimulus-flash.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://www.jakeschmitz.com/blog/feed.xml" title="Jake's Blog" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Jake&#39;s Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Minimal AJAX with Stimulus, Rails 6 and JS HTTP POST Request using Fetch</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-12-19T05:22:00-06:00" itemprop="datePublished">Dec 19, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The process of adding AJAX calls to a Rails application generally results in adding a few hefty libraries to your apps especially if the result is a framework being added to handle dynamic user interactions. The Rails 6 + Stimulus + Turbolinks advertises a lightweight approach to provide dynamic user interactions and the advertising did lives up to its billing. Stimulus provides a very small footprint, short setup time, and straightforward view and controller wiring to add dynamic user interactions to your application.</p>
+
+<p>Two areas caused a small bit of time loss in setup:</p>
+<ol>
+  <li>Setting up the folders and paths for stimulus</li>
+  <li>Creating an HTTP POST request (Using fetch and providing a CRSF Token)</li>
+</ol>
+
+<p>The following will show a simple example and explicitly show the folder structure used and the function calls to provide the CSRF Token for a HTTP POST request to your Rails Controller.</p>
+
+<h2 id="stimulus-setup">Stimulus Setup</h2>
+<p>The wiring of stimulus into the Rails 6 way of handling JavaScript did trigger a bit of research and the following seems to be a clean setup and that setup included added a controllers folder to the app/javascript folder to be the entry point for user actions in the browser.</p>
+
+<p>First, use yarn or npm to add stimulus to your project:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add stimulus
+</code></pre></div></div>
+
+<p>Add a <em>controllers</em> directory to app/javascript.
+In your app/javascript/packs/application.js import the <em>controllers</em> directory:</p>
+
+<pre><code class="language-JavaScript">// app/javascript/packs/application.js
+import "controllers"
+</code></pre>
+
+<p>Add an index.js to that directory with the following (reference stimulus docs for updates):</p>
+
+<pre><code class="language-JavaScript">//  app/javascript/controllers/index.js
+import { Application } from "stimulus"
+import { definitionsFromContext } from "stimulus/webpack-helpers"
+
+const application = Application.start()
+const context = require.context(".", true, /\.js$/)
+
+application.load(definitionsFromContext(context))
+</code></pre>
+
+<h2 id="stimulus-mvc">Stimulus MVC</h2>
+<p>The data- attributes used on HTML elements map provide a straightforward mapping and can be used in JavaScript controllers that will be created for the application.</p>
+
+<h3 id="view">View</h3>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class= </span><span class="s">"col"</span> <span class="na">data-controller=</span><span class="s">"message"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">data-target=</span><span class="s">"message.result"</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">data-target=</span><span class="s">"message.content"</span> <span class="na">type = </span><span class="s">"text"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">data-action=</span><span class="s">"click-&gt;message#send"</span><span class="nt">&gt;</span>Send Message<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>Note, the data_controller=”message” will be wired to the controller <em>app/javascript/controllers/message_controller.js</em>.  The data-target DOM elements will be accessible in the controller.</p>
+
+<h3 id="javascript-controller">JavaScript Controller</h3>
+
+<p>The setup so far will get your request into the browsers JavaScript execution. The next step to do something in your application is to make a request to your backend server. There are several ways can do using jquery and other librarys and instead of adding more node modules I went with using the now include <em>fetch</em> function. This seems like a good choice for this use case as there is minimal overhead. There was one issue that was run into.</p>
+
+<p>app/javascript/controllers/message_controller.js</p>
+<pre><code class="language-JavaScript">import { Controller } from "stimulus"
+
+export default class extends Controller {
+  static targets = ["content", "result"]
+
+  async send() {
+    const csrfToken = document.head.querySelector(`meta[name="csrf-token"]`).getAttribute("content")
+    const messageContent = this.Content
+    let resultMessage = ""
+
+    let response = await fetch('/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        'X-CSRF-Token': csrfToken
+      },
+      body: `{"message": "${this.contentTarget.value}"}`,
+    });
+
+    if (response.ok) {
+      resultMessage = "Thank you for the message!"
+    } else {
+      console.log("HTTP-Error: " + response.status);
+      resultMessage = "There was an error sending your message."
+    }
+
+    this.resultTarget.innerHTML = resultMessage
+  }
+}
+</code></pre>
+
+<h3 id="csrf">CSRF</h3>
+<p>The CSRF token is required, and should not be disabled, to successfully talk to your Rails Controller. Your Rails controller is still doing your heavy lifting. The initial attempts to talk to yoBefore the request successfully arrived to the rails server an error was encountered related to Cross Site Request Forgery.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ActionController::InvalidAuthenticityToken <span class="o">(</span>ActionController::InvalidAuthenticityToken<span class="o">)</span>:
+</code></pre></div></div>
+
+<p>The previously rendered page has the CSRF Token available in the header and is accessible in from the Stimulus JavaScript controller. You will likely see the following error:</p>
+
+<p>The following line will retrieve csrf-token from the rendered page:</p>
+
+<pre><code class="language-JavaScript">const csrfToken = document.head.querySelector(`meta[name="csrf-token"]`).getAttribute("content")
+</code></pre>
+
+<p>In the request you construct using fetch, provide that value as one of the header values:</p>
+<pre><code class="language-JavaScript">headers: {
+  'Content-Type': 'application/json;charset=utf-8',
+  'X-CSRF-Token': csrfToken
+},
+
+</code></pre>
+
+<p>The addition of the csrf token will result in a successful POST request to your Rails controller and the ability to create and modify.</p>
+
+<h1 id="summary">Summary</h1>
+<p>This was a very quick and minimal, yet powerful, add to the application. The availability of the fetch method made the more minimal by not needing to include another library to initiate the HTTP Request back to the server. This approach seems to provide a great deal of runway for your application before moving to more complex solutions without sacrificing on the usability of your application.</p>
+
+<h1 id="references">References</h1>
+<ul>
+  <li>https://stimulusjs.org/</li>
+  <li>https://longliveruby.com/articles/rails-6-stimulus-js</li>
+  <li>https://en.wikipedia.org/wiki/Cross-site_request_forgery</li>
+  <li>https://blog.nvisium.com/understanding-protectfromforgery</li>
+</ul>
+
+  </div><a class="u-url" href="/blog/2020/12/19/rails6-stimulus-flash.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Jake&#39;s Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Jake&#39;s Blog</li><li><a class="u-email" href="mailto:jschmitz@gmail.com">jschmitz@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jschmitz"><svg class="svg-icon"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jschmitz</span></a></li><li><a href="https://www.twitter.com/jakeschmitz"><svg class="svg-icon"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jakeschmitz</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>This is a blog about what I&#39;m learning about</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Quick Conference Setup on FreeClimb | Jake’s Blog</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Quick Conference Setup on FreeClimb" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="How can you enable your users to have conversations? This post will show how to provide conversations programmatically with your applications and we’ll start by creating the most minimal conference we can on FreeClimb. A prerequisite is a previous post Receiving a phone call from FreeClimb, if you haven’t completed the steps in that post you’ll need to in order to complete setting up a conference. The resources needed to complete the steps in this post will be: One FreeClimb Conference Two phone calls" />
+<meta property="og:description" content="How can you enable your users to have conversations? This post will show how to provide conversations programmatically with your applications and we’ll start by creating the most minimal conference we can on FreeClimb. A prerequisite is a previous post Receiving a phone call from FreeClimb, if you haven’t completed the steps in that post you’ll need to in order to complete setting up a conference. The resources needed to complete the steps in this post will be: One FreeClimb Conference Two phone calls" />
+<link rel="canonical" href="https://www.jakeschmitz.com/blog/2020/05/11/freeclimb-quick-conference.html" />
+<meta property="og:url" content="https://www.jakeschmitz.com/blog/2020/05/11/freeclimb-quick-conference.html" />
+<meta property="og:site_name" content="Jake’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-11T05:58:00-05:00" />
+<script type="application/ld+json">
+{"description":"How can you enable your users to have conversations? This post will show how to provide conversations programmatically with your applications and we’ll start by creating the most minimal conference we can on FreeClimb. A prerequisite is a previous post Receiving a phone call from FreeClimb, if you haven’t completed the steps in that post you’ll need to in order to complete setting up a conference. The resources needed to complete the steps in this post will be: One FreeClimb Conference Two phone calls","headline":"Quick Conference Setup on FreeClimb","dateModified":"2020-05-11T05:58:00-05:00","datePublished":"2020-05-11T05:58:00-05:00","url":"https://www.jakeschmitz.com/blog/2020/05/11/freeclimb-quick-conference.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jakeschmitz.com/blog/2020/05/11/freeclimb-quick-conference.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://www.jakeschmitz.com/blog/feed.xml" title="Jake's Blog" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Jake&#39;s Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Quick Conference Setup on FreeClimb</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-05-11T05:58:00-05:00" itemprop="datePublished">May 11, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>How can you enable your users to have conversations? This post will show how to provide conversations programmatically with your applications and we’ll start by creating the most minimal conference we can on <a href="www.freeclimb.com">FreeClimb</a>. A prerequisite is a previous post <a href="https://jakeschmitz.com/blog/ruby/rails/freeclimb/2020/04/15/inbound-freeclimb-call.html">Receiving a phone call from FreeClimb</a>, if you haven’t completed the steps in that post you’ll need to in order to complete setting up a conference. The resources needed to complete the steps in this post will be:</p>
+<ol>
+  <li>One <a href="https://docs.freeclimb.com/reference/conferences">FreeClimb Conference</a></li>
+  <li>Two phone calls</li>
+</ol>
+
+<p>The diagram to connect two calls is much appears much more complex than the code required. We’ll break it down as we go as well too.</p>
+
+<p><img src="https://www.jakeschmitz.com/blog/assets/diagrams/quick_conference_full.svg" alt="Incoming Call Sequence Diagram" /></p>
+
+<p>You’ll notice that the two callers into FreeClimb both end up in a FreeClimb conference and when callers are in a started conference they will be able to talk to each other.</p>
+
+<h2 id="create-freeclimb-conference">Create FreeClimb Conference</h2>
+<p>FreeClimb conferences are persistent so you can re-use them as needed. This means that conferences can be created before phone calls arrive to your conference arrive. We will use the FreeClimb API to create a conference using curl.</p>
+
+<p>Revisiting our sequence diagram we will complete these steps:
+<img src="https://www.jakeschmitz.com/blog/assets/diagrams/quick_conference_curl.svg" alt="Incoming Call Sequence Diagram" /></p>
+
+<p>First, lets checkout the reference docs to <a href="https://docs.freeclimb.com/reference/conferences#create-a-conference">create a conference</a>.  The curl in the example provided is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="s2">"https://{api_url}/Accounts/{account_id}/Conferences"</span> <span class="nt">-d</span> <span class="s2">"{</span><span class="se">\"</span><span class="s2">alias</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">test</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">playBeep</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">always</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">record</span><span class="se">\"</span><span class="s2">:false, </span><span class="se">\"</span><span class="s2">waitUrl</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">http://myapp/waitaudio</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">statusCallbackUrl</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">http://myserver/confstatuscallback</span><span class="se">\"</span><span class="s2">}"</span> <span class="nt">-u</span> <span class="s2">"{account_id}:{auth_token}"</span>
+</code></pre></div></div>
+
+<p>When working with a command of this length I’ll put the string into a text editor, make adjustments, and copy and paste to the terminal. I find that easier than trying to edit the command in the terminal itself.</p>
+
+<p>There are three keys in the curl command you will need to replace:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Replace with</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>api_url</td>
+      <td>replace with www.freeclimb.com/apiserver</td>
+    </tr>
+    <tr>
+      <td>account_id</td>
+      <td>Go to the dashboard, replace with your account_id (<strong>two replacements!</strong>)</td>
+    </tr>
+    <tr>
+      <td>auth_token</td>
+      <td>Go to the dashboard, replace with your auth_token</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>When making your replacements, remove the curly braces. The only curly braces in the command should be associated with the data parameter (-d). If you leave them in with auth portion, after -u, you will receive <em>Unauthorized Error</em> responses.  The waitUrl and statusCallbackUrl are also removed in the example below for simplicity.</p>
+
+<p>Your curl command should looks something like this after completing your adjustments:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="s2">"https://www.freeclimb.com/apiserver/Accounts/AC5asdf345321421442412sfsdvsgd/Conferences"</span> <span class="nt">-d</span> <span class="s2">"{</span><span class="se">\"</span><span class="s2">alias</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Jakes test Conference</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">playBeep</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">always</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">record</span><span class="se">\"</span><span class="s2">:false }"</span> <span class="nt">-u</span> <span class="s2">"AC5asdf345321421442412sfsdvsgd:bsdf214sadsfasfdsfasfasfasffht"</span>
+</code></pre></div></div>
+
+<p>You will have a <em>conferenceId</em> returned in the response and we’re going to need that for our next step.</p>
+
+<h2 id="connect-your-callers">Connect Your Callers</h2>
+<p>This portion builds off of the previous blog post Receiving a <a href="https://jakeschmitz.com/blog/ruby/rails/freeclimb/2020/04/15/inbound-freeclimb-call.html">Phone Call from FreeClimb</a>. If you haven’t check that post out, please do so. From the previous post, you have a phone number available that is connected to your app that can receive many phone calls. We will apply the same behavior to all calls, with that N calls can arrive into the system and the processing will be:</p>
+
+<p><img src="https://www.jakeschmitz.com/blog/assets/diagrams/quick_conference_one_caller.svg" alt="Incoming Call Sequence Diagram" /></p>
+
+<p>The code we’ll add below will put all callers that call your number into a conference and enable those callers to talk to each other.</p>
+
+<p>The next update will be to the InboundCallsController that you’ve already created. We’re going to use the <em>conferenceId</em> we previously to host a conference. To do so, we’ll use PerCL, its JSON commands under the hood, to tell FreeClimb to add all calls received to the conference resource. The PerCL command to use is <a href="https://docs.freeclimb.com/reference/conference-participants-1#addtoconference">addToConference</a> and that will be added to your HTTP Response back to FreeClimb. Start up your server and confirm your “Hello World” app is working. Then, update the response your providing:</p>
+
+<p>The most minimal code in your controller would be:</p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">InboundCallsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+
+  <span class="k">def</span> <span class="nf">create</span>
+    <span class="n">script</span> <span class="o">=</span> <span class="no">Percl</span><span class="o">::</span><span class="no">Script</span><span class="p">.</span><span class="nf">new</span>
+
+    <span class="n">addToConference</span> <span class="o">=</span> <span class="no">Percl</span><span class="o">::</span><span class="no">AddToConference</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"conferenceId_from_your_curl"</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="ss">:callId</span><span class="p">])</span>
+    <span class="n">script</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">addToConference</span><span class="p">)</span>
+
+    <span class="n">render</span> <span class="ss">json: </span><span class="n">script</span><span class="p">.</span><span class="nf">to_json</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Ensure your server is running and try out a couple of phone calls. The first call you’re going to get connected and hear silence, its a bit strange. The second call will trigger a beep in the conference and you’ll be connected and the two callers can chats. Success!</p>
+
+<h2 id="extra---remove-the-strange-initial-silence">Extra! - Remove the strange initial silence</h2>
+
+<p>First a bit of a greeting goes along way. You can add a greeting into your PerCl response</p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">say</span> <span class="o">=</span> <span class="no">Percl</span><span class="o">::</span><span class="no">Say</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"Hello, you're about to be added to a conference."</span><span class="p">)</span>
+    <span class="n">script</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">say</span><span class="p">)</span>
+</code></pre></div></div>
+<p>The string you provide will be read out, Text To Speech (TTS), to the caller upon arrival. After the greeting the caller will experience silence until another caller arrives. We can keep improving.</p>
+
+<p>Next, we can add hold music for the intial caller(s). We can add folks into what many conferencing folks would call the <em>lobby</em> by setting the startConfOnEnter attribute to false.</p>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">addToConference</span> <span class="o">=</span> <span class="no">Percl</span><span class="o">::</span><span class="no">AddToConference</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">conference_id</span><span class="p">,</span> <span class="n">call_id</span><span class="p">)</span>
+    <span class="n">addToConference</span><span class="p">.</span><span class="nf">startConfOnEnter</span> <span class="o">=</span> <span class="kp">false</span>
+    <span class="n">script</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="n">addToConference</span><span class="p">)</span>
+</code></pre></div></div>
+<p>If the conference is not started and <em>startConfOnEnter</em> is set to false, callers will hear hold music. When placing callers into the lobby you’ll have to determine what you want to trigger a conference to start and add that logic. Perhaps a specific phone number calling in triggers the conference to start or a PIN being entered (checkout getDigits!)?  Up to you.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>You’ve created a conference call that is available to anyone that calls that number, pretty cool and also something you probably don’t want to keep running for the world :) Next try getting conferences created dynamically using the API and use your own logic to get folks into the lobby and then start the conference. You can keep adding building blocks of FreeClimb API along with other API services to make your app more and more awesome.</p>
+
+  </div><a class="u-url" href="/blog/2020/05/11/freeclimb-quick-conference.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Jake&#39;s Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Jake&#39;s Blog</li><li><a class="u-email" href="mailto:jschmitz@gmail.com">jschmitz@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jschmitz"><svg class="svg-icon"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jschmitz</span></a></li><li><a href="https://www.twitter.com/jakeschmitz"><svg class="svg-icon"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jakeschmitz</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>This is a blog about what I&#39;m learning about</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

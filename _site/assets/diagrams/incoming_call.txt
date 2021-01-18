@@ -1,0 +1,8 @@
+title FreeClimb Incoming Call
+
+Caller->FreeClimb:A phone call is made to a FreeClimb Phone Number
+FreeClimb-> NGROK: HTTP Request: FC Inbound Webhook
+NGROK->Your Rails App: HTTP Request: FC Inbound Webhook
+Your Rails App--> NGROK: HTTP Response: PerCL SAY & HANGUP (JSON in response body)
+NGROK--> FreeClimb: HTTP Response: PerCL SAY & HANGUP (JSON in response body)
+FreeClimb--> Caller: SAY message & HANGUP	

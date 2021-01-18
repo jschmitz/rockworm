@@ -1,0 +1,6 @@
+Caller 1->FreeClimb:A phone call is made to a FreeClimb Phone Number
+FreeClimb->Your Rails App: HTTP Request: FC Inbound Webhook
+Your Rails App--> FreeClimb: HTTP Response: PerCL Say & AddToConference 
+FreeClimb->Caller 1: SAY
+FreeClimb-> FreeClimb Conference: Caller 1 moved to Conference
+
