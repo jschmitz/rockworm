@@ -83,6 +83,3 @@ test:
 #
 production:
   <<: *default
-  database: rockworm_production
-  username: rockworm
-  password: <%= ENV['ROCKWORM_DATABASE_PASSWORD'] %>

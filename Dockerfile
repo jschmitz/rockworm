@@ -10,6 +10,7 @@ WORKDIR /usr/src/app
 # We copy these files from our current application to the /app container
 COPY Gemfile Gemfile.lock ./
 RUN bundle check || bundle install
+RUN RAILS_ENV=production rails assets:precompile
 
 COPY . .
 CMD ["rails", "server", "-b", "0.0.0.0"]

@@ -29,7 +29,8 @@ services:
       - ROCKWORM_WEB_PHONE_NUMBER=${ROCKWORM_WEB_PHONE_NUMBER}
       - MY_PHONE_NUMBER=${MY_PHONE_NUMBER}
       - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-      - ROCKWORM_DATABASE_URL="postgres://=${ROCKWORM_DB_USER}:${ROCKWORM_DB_PASSWORD}@${ROCKWORM_DB_HOST}/${ROCKWORM_DB_NAME}
+      - FC_ACCOUNT_ID=${FC_ACCOUNT_ID}
+      - FC_ACCOUNT_TOKEN=${FC_ACCOUNT_TOKEN}
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
   nginx:
     build:
