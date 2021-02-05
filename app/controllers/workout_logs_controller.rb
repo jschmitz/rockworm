@@ -11,7 +11,7 @@ class WorkoutLogsController < ApplicationController
       h = Hash.new
       h["workout_date"] = wl.workout_date if wl.workout_date
       h["day_of_week"] = wl.workout_date.strftime("%A") if wl.workout_date
-      h["week_of_year"] = wl.workout_date.strftime("%U") if wl.workout_date
+      h["week_of_year"] = wl.workout_date.strftime("%U").to_i if wl.workout_date
       h["notes"] = wl.notes
       h["category"] = wl.category
       h["intensity"] = wl.intensity
@@ -20,8 +20,8 @@ class WorkoutLogsController < ApplicationController
     end
 
     weeks_of_year = calendar_workout_logs.filter_map { |w| w["workout_date"].strftime("%U") if w["workout_date"] }
-    calendar_info["week_of_year_min"] = weeks_of_year.min
-    calendar_info["week_of_year_max"] = Date.today.strftime("%U")
+    calendar_info["week_of_year_min"] = 0
+    calendar_info["week_of_year_max"] = Date.today.strftime("%U").to_i
     calendar_info["calendar_workout_logs"] = calendar_workout_logs
 
     respond_to do |format|
