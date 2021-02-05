@@ -43,10 +43,10 @@
   <section id="about_me">
     <h2 id="about_me">About Me</h1>
     <div class="row">
-      <div class= "col">
+      <div class= "col-12 col-xl-6">
         <%= image_tag "about_collage.jpg", alt:"About Me Collage", class:"img-fluid", style:"min-width:25em; max-width:75%" %>
       </div>
-      <div class= "col">
+      <div class= "col-12 col-xl-6">
         <p>Hi, I'm Jake Schmitz. Dad. Husband. Leader. Software Developer.</p>
         <p>My main focus is to create and continuously improve the environments in which software teams deliver software solutions and collaborate across all aspects of the software lifecycle to deliver the right solutions efficiently. </p>
         <p>The software industry has provided a tremendous career over the last 20 plus years and I am grateful for the different roles in the software creation process I’ve had the opportunity to experience. The constant in my career has been that I have consistently gravitated towards leadership roles and I’ve found great enjoyment many of those responsibilities.</p>
@@ -64,7 +64,7 @@
 
   <section id="projects">
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-lg-6">
         <h2 id="projects">Projects</h1>
         <p>In elementry school I had a trap keep and the lead page was a nice had a Lifelong Lerning picture. I'm still going with mantra thirty years later! Reading books, video course and applying those learnings on a day to day basis, side project or blog post help me keep the learning going. </p>
         <p>
@@ -77,7 +77,7 @@
         </ul>
         </p>
       </div>
-      <div class="col">
+      <div class="col-12 col-lg-6">
         <a href="www.freeclimb.com"><%= image_tag "freeclimb_logo.png",alt:"FreeClimb Logo" %></a>
       </div>
     </div>
@@ -90,10 +90,10 @@
   <section id="seneca_foundation">
     <h2 >Seneca Foundation</h1>
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-lg-6">
         <%= image_tag "seneca.png",alt:"Learn To Code", class: "img-fluid", style: "max-width:100%;height:auto" %>
       </div>
-      <div class="col">
+      <div class="col-12 col-lg-6">
         <p>I am excited and grateful to have the oppurtunity to contribute to the <a href="https://www.senecafoundation.org/">Seneca Foundation</a>. We have a great first cohort and a great team of folks making positive things happen and Mr. Jim Whiteley has a great vision for the Foundation.</p>
       </div>
     </div>
@@ -107,7 +107,7 @@
     <div class="workouts">
       <h2>Habits</h2>
       <div class="row">
-        <div class="col">
+        <div class="col-12 col-lg-6">
           <p>
             The idea the small things you do with consistent discipline basis appeal to me. Looking back, I can see the impacts of my habits and the results of my academic, professional, and athletic endevors. The better the habits the better the results. The books I've read to help understand that pattern and build a few better habits, still a long ways to go,  were 7 Habits of Hightly Effiective People, Slight Edge, Power of Habit and the best of the bunch is Atomic Habits. Atomic Habits had the biggest impact and is helping my continue to build better habits.
           </p>
@@ -116,7 +116,7 @@
           </p>
           <%=link_to "Workouts", workout_logs_path %>
         </div>
-        <div class="col">
+        <div class="col-12 col-lg-6">
           <div id="my_dataviz"></div>
         </div>
       </div>
@@ -130,13 +130,13 @@
   <section id="about_me">
     <h2 id="contact_me">Contact Me</h1>
     <div class="row">
-      <div class= "col">
+      <div class= "col-12 col-lg-6">
         <p>It would be great to hear from you! That message send will deliver a text message to me or try out an automated phone experience by calling
           <%= number_to_phone(@contact_phone_number,  area_code: true) %> .
         </p>
         <p>The messaging and calling automation are both provided by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a></p>
       </div>
-      <div class= "col" data-controller="message">
+      <div class= "col-12 col-lg-6" data-controller="message">
         <div>
           <div data-target="message.result"></div>
           <textarea class="form-control" data-target="message.content" rows="3"></textarea>
