@@ -1,0 +1,642 @@
+// Used browser to export from heroku
+// Created file
+// Took out top level info
+// Removed day of week and week number with vim macro
+{
+	"calendar_workout_logs": [{
+		"workout_date": "2020-09-06T11:56:06.471Z",
+		"notes": null,
+		"category": null,
+		"intensity": 5
+	}, {
+		"workout_date": "2020-09-11T11:23:19.727Z",
+		"notes": null,
+		"category": null,
+		"intensity": 10
+	}, {
+		"workout_date": "2020-09-13T00:13:37.755Z",
+		"notes": null,
+		"category": null,
+		"intensity": 3
+	}, {
+		"workout_date": "2020-09-14T00:24:28.888Z",
+		"notes": null,
+		"category": null,
+		"intensity": 10
+	}, {
+		"workout_date": "2020-09-15T10:04:55.935Z",
+		"notes": null,
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2020-09-15T10:09:50.977Z",
+		"notes": null,
+		"category": null,
+		"intensity": 1
+	}, {
+		"workout_date": "2020-09-15T10:36:22.923Z",
+		"notes": null,
+		"category": null,
+		"intensity": 8
+	}, {
+		"workout_date": "2020-09-15T10:51:42.610Z",
+		"notes": null,
+		"category": null,
+		"intensity": 9
+	}, {
+		"workout_date": "2020-09-15T10:58:21.950Z",
+		"notes": null,
+		"category": null,
+		"intensity": 9
+	}, {
+		"workout_date": "2020-10-10T21:55:31.719Z",
+		"notes": "I did a P90X 3 CVX work out. It's like cardio and a little bit of way.",
+		"category": "cardio",
+		"intensity": 6
+	}, {
+		"workout_date": "2020-09-15T11:08:14.635Z",
+		"notes": "Hey, this is Mike stretching.",
+		"category": null,
+		"intensity": 2
+	}, {
+		"workout_date": "2020-09-15T22:23:08.049Z",
+		"notes": "I did some really light stretching because I'm sore from The Crucible the other day. So I stretch my hamstrings and hips and shoulders. That's all I did.",
+		"category": null,
+		"intensity": 1
+	}, {
+		"workout_date": "2020-10-11T21:55:52.378Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-09-16T22:04:13.996Z",
+		"notes": "I did a half hour.",
+		"category": null,
+		"intensity": 3
+	}, {
+		"workout_date": "2020-09-17T18:24:34.667Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-09-28T21:42:27.279Z",
+		"notes": "I waited mowed the lawn.",
+		"category": "cardio",
+		"intensity": 0
+	}, {
+		"workout_date": "2020-09-17T22:06:38.598Z",
+		"notes": "I didn't do much today.",
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-09-18T22:50:13.004Z",
+		"notes": "I did Tony yoga. I ran a mountain and then I did forward a million herpes, and it was awesome.",
+		"category": null,
+		"intensity": 5
+	}, {
+		"workout_date": "2020-09-19T22:00:57.783Z",
+		"notes": "went for a walk and is P90X total Center just",
+		"category": "functional",
+		"intensity": 6
+	}, {
+		"workout_date": "2020-10-04T21:42:27.000Z",
+		"notes": "Did P90X3 total synergistics in the garage with rings",
+		"category": "functional",
+		"intensity": 6
+	}, {
+		"workout_date": "2020-09-20T22:00:53.848Z",
+		"notes": "I did P90X agility in the backyard.",
+		"category": "functional",
+		"intensity": 7
+	}, {
+		"workout_date": "2020-10-12T21:55:23.086Z",
+		"notes": "There was a production issue at work, and I did not get my workout in.",
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-09-21T22:08:28.258Z",
+		"notes": "I did nothing.",
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-09-22T23:28:29.211Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-13T21:55:39.847Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-09-22T23:28:46.648Z",
+		"notes": "I did P90X yoga today.",
+		"category": "yoga",
+		"intensity": 4
+	}, {
+		"workout_date": "2020-10-05T00:00:00.000Z",
+		"notes": "I did P90X Dynamics.",
+		"category": "other",
+		"intensity": 4
+	}, {
+		"workout_date": "2020-10-02T00:00:00.000Z",
+		"notes": "Rode indoor bikie with Alex and Mariano on Rouvy",
+		"category": "cardio",
+		"intensity": 5
+	}, {
+		"workout_date": "2020-09-23T22:48:24.602Z",
+		"notes": "Hi Dad, P90X the challenge. It was all push-ups and Pull-Ups for 30.",
+		"category": "functional",
+		"intensity": 8
+	}, {
+		"workout_date": "2020-10-06T21:55:52.710Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-09-24T22:07:08.269Z",
+		"notes": "298 did the P90X Party Cardio CVS work out as good?",
+		"category": "cardio",
+		"intensity": 7
+	}, {
+		"workout_date": "2020-10-14T21:55:52.611Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-09-25T22:01:11.578Z",
+		"notes": "Adida P90X 3 The Warrior workout. It was pretty tiring. I got really sweaty.",
+		"category": "functional",
+		"intensity": 9
+	}, {
+		"workout_date": "2020-10-06T22:42:32.265Z",
+		"notes": "I did P90X 3 Pilates.",
+		"category": "other",
+		"intensity": 5
+	}, {
+		"workout_date": "2020-10-15T21:55:51.755Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-07T21:55:23.977Z",
+		"notes": "I did P90X 3 The Challenge. It's a lot of pushups and Pull-Ups for 30 minutes.",
+		"category": "functional",
+		"intensity": 8
+	}, {
+		"workout_date": "2020-09-09T12:10:39.362Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-10-20T21:55:26.331Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-16T21:55:17.825Z",
+		"notes": "I did Beach Bobby's don't work with Kristen. It was fun pretty tough in the garage. Good workout.",
+		"category": "functional",
+		"intensity": 8
+	}, {
+		"workout_date": "2020-10-14T00:00:00.000Z",
+		"notes": "P903X Yoga",
+		"category": "yoga",
+		"intensity": 3
+	}, {
+		"workout_date": "2020-10-17T21:55:16.732Z",
+		"notes": "I did P90X 3 Pilates.",
+		"category": "other",
+		"intensity": 4
+	}, {
+		"workout_date": "2020-10-09T21:55:46.926Z",
+		"notes": "5 rounds of run to end of block, 10 ring rows, 50 mountain climbers and 10 burpees. Took 17:53 to complete.\n",
+		"category": "functiional",
+		"intensity": 8
+	}, {
+		"workout_date": "2020-10-08T21:55:30.496Z",
+		"notes": "I had a rest day",
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-10-21T21:55:38.931Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-18T21:55:53.239Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-22T21:55:20.334Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-10-18T22:54:41.416Z",
+		"notes": "Headed P90X 3 to challenge the push-up and pull-up workout. I did my numbers were 27 for the push-ups and 5 for the pull ups got them all except for the military push-ups.",
+		"category": "functional",
+		"intensity": 7
+	}, {
+		"workout_date": "2020-10-23T21:55:26.654Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-19T21:55:20.776Z",
+		"notes": "Did a pretty high intensity work out with Kristen all those only 15 minutes. It was pretty good. I forget the name of it, but it's like cardio body weight types stuff good good stuff.",
+		"category": null,
+		"intensity": 6
+	}, {
+		"workout_date": "2020-10-25T21:55:51.519Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-23T22:08:59.958Z",
+		"notes": "I did a little bit of yoga.",
+		"category": null,
+		"intensity": 2
+	}, {
+		"workout_date": "2020-10-24T21:55:30.456Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-27T21:55:51.694Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-25T21:56:53.622Z",
+		"notes": "Hi, Dave, P90X to Clio side. It was pretty good.",
+		"category": "functional",
+		"intensity": 7
+	}, {
+		"workout_date": "2020-10-26T21:55:28.195Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-24T00:00:00.000Z",
+		"notes": "I did P90X to the core work out the first one in the series.",
+		"category": "cardio",
+		"intensity": 7
+	}, {
+		"workout_date": "2020-10-28T21:55:51.573Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-10-29T21:55:32.188Z",
+		"notes": "Hi, dude, P90X 3.",
+		"category": "yoga",
+		"intensity": 4
+	}, {
+		"workout_date": "2020-10-30T21:55:20.845Z",
+		"notes": "I did P90X 3 incinerator lots of shoulders and arms.",
+		"category": "functional",
+		"intensity": 7
+	}, {
+		"workout_date": "2020-11-01T21:55:18.451Z",
+		"notes": "I did P90X to total body.",
+		"category": "functional",
+		"intensity": 7
+	}, {
+		"workout_date": "2020-11-02T12:30:09.598Z",
+		"notes": "I did P 93X a brief 4 + some ability exercises.",
+		"category": null,
+		"intensity": 5
+	}, {
+		"workout_date": "2020-11-03T21:55:34.713Z",
+		"notes": "It was a P90X 3 isometric work out for 30 minutes.",
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2020-11-04T21:55:26.687Z",
+		"notes": "Allen what's go",
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-11-06T21:55:26.218Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-12-16T21:55:15.845Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2020-11-08T22:07:04.740Z",
+		"notes": "I did my own Jake fit test the fit test included a 1.25 mile run which I did it is 9 minutes and 3 seconds. I did 50 push ups that was pushups too exhausting exhausting. I did 50 and then I did as many pull ups as I could to exhaustion and I did 7, so that was 1.2 mile 1.25 mile run at 9 minutes and 3 seconds 50 push ups and that was too exhausting and 7 coops to exhaustion.",
+		"category": "functional",
+		"intensity": 7
+	}, {
+		"workout_date": "2021-01-19T21:55:54.354Z",
+		"notes": "Erase and re-record, press 3 to continue recording where you left off, press 4.",
+		"category": null,
+		"intensity": 2
+	}, {
+		"workout_date": "2020-11-09T21:55:16.798Z",
+		"notes": "I did a little bit of yoga.",
+		"category": null,
+		"intensity": 1
+	}, {
+		"workout_date": "2020-11-05T03:36:57.000Z",
+		"notes": "I went for a run a little over a bio and I did a bunch of Pull-Ups.",
+		"category": "cardio",
+		"intensity": 4
+	}, {
+		"workout_date": "2020-11-17T21:55:29.148Z",
+		"notes": null,
+		"category": null,
+		"intensity": 1
+	}, {
+		"workout_date": "2020-11-18T21:55:25.769Z",
+		"notes": null,
+		"category": null,
+		"intensity": 1
+	}, {
+		"workout_date": "2020-12-20T21:55:20.586Z",
+		"notes": "Hi, Dave Beach Body Work Lakes day week 3.",
+		"category": null,
+		"intensity": 10
+	}, {
+		"workout_date": "2020-11-14T00:00:00.000Z",
+		"notes": "The Work, week 1, Legs",
+		"category": "functional",
+		"intensity": 9
+	}, {
+		"workout_date": "2020-11-15T00:00:00.000Z",
+		"notes": "P90x3 yoga",
+		"category": "yoga",
+		"intensity": 4
+	}, {
+		"workout_date": "2020-11-16T00:00:00.000Z",
+		"notes": "Walk",
+		"category": "yoga",
+		"intensity": 1
+	}, {
+		"workout_date": "2020-11-19T00:00:00.000Z",
+		"notes": "The Work - Week 1 - Agility and Endurance",
+		"category": "functional",
+		"intensity": 8
+	}, {
+		"workout_date": "2020-11-20T21:55:40.529Z",
+		"notes": "I did P90X 3 yoga.",
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2021-01-21T21:55:21.996Z",
+		"notes": null,
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2020-11-21T21:55:16.767Z",
+		"notes": "I did the work the pool workout week one.",
+		"category": "functional",
+		"intensity": 8
+	}, {
+		"workout_date": "2020-11-22T21:55:22.982Z",
+		"notes": null,
+		"category": null,
+		"intensity": 8
+	}, {
+		"workout_date": "2020-12-23T21:55:32.031Z",
+		"notes": "Hey, dude, Beachbody hear you're in San ability week 3.",
+		"category": "functional",
+		"intensity": 9
+	}, {
+		"workout_date": "2020-11-26T21:55:14.790Z",
+		"notes": "I went for a mile and a half walk.",
+		"category": null,
+		"intensity": 2
+	}, {
+		"workout_date": "2020-12-28T21:55:21.285Z",
+		"notes": null,
+		"category": null,
+		"intensity": 8
+	}, {
+		"workout_date": "2020-11-29T02:28:12.120Z",
+		"notes": "Hey, did Beach Body the work?",
+		"category": "functional",
+		"intensity": 8
+	}, {
+		"workout_date": "2020-11-25T00:00:00.000Z",
+		"notes": "BeachBody: The Work. Week 2 workout 1.",
+		"category": "functional",
+		"intensity": 9
+	}, {
+		"workout_date": "2020-11-28T00:00:00.000Z",
+		"notes": "BeachBody: The Work. Week 2 workout 1.",
+		"category": "functional",
+		"intensity": 9
+	}, {
+		"workout_date": "2020-12-29T21:55:52.450Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-12-01T21:55:16.754Z",
+		"notes": "I did yoga.",
+		"category": "yoga",
+		"intensity": 2
+	}, {
+		"workout_date": "2020-12-30T21:55:16.068Z",
+		"notes": null,
+		"category": null,
+		"intensity": 6
+	}, {
+		"workout_date": "2020-12-03T21:55:22.640Z",
+		"notes": "I didn't Muscle Recovery with Ted.",
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2021-01-02T21:55:51.166Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-12-04T21:55:19.822Z",
+		"notes": "I did Beachbody cardio and core stuff. Yeah, just lose heart.",
+		"category": "functional",
+		"intensity": 9
+	}, {
+		"workout_date": "2021-01-04T21:55:54.129Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-12-05T21:55:19.860Z",
+		"notes": "I did Beachbody to work isometrics and week too.",
+		"category": "functional",
+		"intensity": 9
+	}, {
+		"workout_date": "2020-12-06T00:00:00.000Z",
+		"notes": "One mile walk",
+		"category": "cardio",
+		"intensity": 2
+	}, {
+		"workout_date": "2020-12-07T00:00:00.000Z",
+		"notes": "Did 10 minutes of yoga",
+		"category": "yoga",
+		"intensity": 1
+	}, {
+		"workout_date": "2020-12-09T00:00:00.000Z",
+		"notes": "Did 30 minutes of yoga and mobility stretching",
+		"category": "yoga",
+		"intensity": 3
+	}, {
+		"workout_date": "2020-12-11T21:55:21.393Z",
+		"notes": "You're doing Beach Body Crucible.",
+		"category": null,
+		"intensity": 10
+	}, {
+		"workout_date": "2021-01-05T21:55:30.613Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2020-12-12T21:55:23.137Z",
+		"notes": "lots of stretching",
+		"category": null,
+		"intensity": 2
+	}, {
+		"workout_date": "2020-12-15T21:55:32.382Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2021-01-06T21:55:20.266Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2021-01-07T21:55:53.254Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2021-01-08T21:55:16.256Z",
+		"notes": null,
+		"category": null,
+		"intensity": 0
+	}, {
+		"workout_date": "2021-01-09T21:55:29.709Z",
+		"notes": null,
+		"category": null,
+		"intensity": null
+	}, {
+		"workout_date": "2021-01-11T21:55:24.827Z",
+		"notes": null,
+		"category": "yoga",
+		"intensity": 4
+	}, {
+		"workout_date": "2021-01-12T21:55:28.840Z",
+		"notes": null,
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2021-01-13T21:55:15.455Z",
+		"notes": null,
+		"category": null,
+		"intensity": 5
+	}, {
+		"workout_date": "2021-01-22T21:55:15.951Z",
+		"notes": null,
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2021-01-15T21:55:18.279Z",
+		"notes": null,
+		"category": null,
+		"intensity": 3
+	}, {
+		"workout_date": "2021-01-14T21:55:53.420Z",
+		"notes": "disconnect press 1 to record your message press 2",
+		"category": null,
+		"intensity": 6
+	}, {
+		"workout_date": "2021-01-16T21:55:51.534Z",
+		"notes": null,
+		"category": null,
+		"intensity": 3
+	}, {
+		"workout_date": "2021-01-20T21:55:32.626Z",
+		"notes": null,
+		"category": null,
+		"intensity": 7
+	}, {
+		"workout_date": "2021-01-18T21:55:21.432Z",
+		"notes": "I did yoga.",
+		"category": "yoga",
+		"intensity": 4
+	}, {
+		"workout_date": "2021-01-17T21:55:53.289Z",
+		"notes": null,
+		"category": null,
+		"intensity": 2
+	}, {
+		"workout_date": "2021-01-23T21:55:25.410Z",
+		"notes": null,
+		"category": null,
+		"intensity": 3
+	}, {
+		"workout_date": "2021-01-25T21:55:17.184Z",
+		"notes": null,
+		"category": null,
+		"intensity": 5
+	}, {
+		"workout_date": "2021-01-29T21:55:51.954Z",
+		"notes": "BOD The Work Wk4 Day 2",
+		"category": null,
+		"intensity": 9
+	}, {
+		"workout_date": "2021-01-24T21:55:52.870Z",
+		"notes": null,
+		"category": null,
+		"intensity": 5
+	}, {
+		"workout_date": "2021-01-27T21:55:24.361Z",
+		"notes": null,
+		"category": null,
+		"intensity": 4
+	}, {
+		"workout_date": "2021-01-28T21:55:20.519Z",
+		"notes": "I did Corey yoga.",
+		"category": null,
+		"intensity": 5
+	}, {
+		"workout_date": "2021-01-26T21:55:53.341Z",
+		"notes": "Went for a walk",
+		"category": null,
+		"intensity": 1
+	}, {
+		"workout_date": "2021-01-30T22:39:41.854Z",
+		"notes": "Beachbody on demand week 4",
+		"category": null,
+		"intensity": 9
+	}, {
+		"workout_date": "2021-01-30T21:55:51.335Z",
+		"notes": "Yoga",
+		"category": null,
+		"intensity": 3
+	}, {
+		"workout_date": "2021-01-31T21:55:52.912Z",
+		"notes": "Yoga",
+		"category": null,
+		"intensity": 3
+	}, {
+		"workout_date": "2021-02-02T21:55:52.674Z",
+		"notes": "BOD Week 4 Day 4 Isometrics",
+		"category": null,
+		"intensity": 8
+	}, {
+		"workout_date": "2021-02-04T21:55:52.773Z",
+		"notes": "Did some shovelling",
+		"category": null,
+		"intensity": 2
+	}]
+}
