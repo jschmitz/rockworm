@@ -1,3 +1,0 @@
-Terminal ->FreeClimb: Curl Create Conference
-FreeClimb-> FreeClimb Conference: FreeClimb Conference Created
-FreeClimb --> Terminal: 200 OK
