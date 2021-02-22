@@ -12,19 +12,19 @@
       <a class="nav-item nav-link" href="#contact_me">Contact Me</a>
     </div>
     <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-      <a target="_blank" href="https://github.com/jschmitz">
+      <a target="_blank" href="https://github.com/jschmitz" rel="noreferrer noopener">
         <%= image_tag "Octocat.png", width:"32", height:"32", alt:"Github Logo"%>
       </a>
-      <a target="_blank" href="https://twitter.com/jakeschmitz">
+      <a target="_blank" href="https://twitter.com/jakeschmitz" rel="noreferrer noopener">
         <%= image_tag "twitter.svg", width:"32", height:"32", alt:"Twitter Logo"%>
       </a>
-      <a target="_blank" href="https://www.goodreads.com/user/show/18015802-jake-schmitz">
+      <a target="_blank" href="https://www.goodreads.com/user/show/18015802-jake-schmitz" rel="noreferrer noopener">
         <%= image_tag "goodreads.png", width:"32", height:"32", alt:"Goodreads Logo"%>
       </a>
-      <a target="_blank" href="https://www.linkedin.com/in/jake-schmitz-745b3b1/">
+      <a target="_blank" href="https://www.linkedin.com/in/jake-schmitz-745b3b1/" rel="noreferrer noopener">
         <%= image_tag "linkedin.png", width:"32", height:"32", alt:"LinkedIn Logo" %>
       </a>
-      <a target="_blank" href="https://www.jakeschmitz.com/blog">
+      <a target="_blank" href="https://www.jakeschmitz.com/blog" rel="noreferrer noopener">
         <%= image_tag "blog.png", width:"32", height:"32", alt:"Blog Logo" %>
       </a>
     </div>
@@ -44,7 +44,7 @@
     <h2 id="about_me">About Me</h1>
     <div class="row">
       <div class= "col-12 col-xl-6">
-        <%= image_tag "about_collage.jpg", alt:"About Me Collage", class:"img-fluid", style:"min-width:25em; max-width:75%" %>
+        <%= image_tag "about_collage.jpg", alt:"About Me Collage", class:"img-fluid ", style:"min-width:25em; max-width:75%; height: auto" %>
       </div>
       <div class= "col-12 col-xl-6">
         <p>Hi, I'm Jake Schmitz. Dad. Husband. Leader. Software Developer.</p>
@@ -72,7 +72,7 @@
         </p>
       </div>
       <div class="col-12 col-lg-6">
-        <a href="www.freeclimb.com"><%= image_tag "freeclimb_logo.png",alt:"FreeClimb Logo" %></a>
+        <a href="www.freeclimb.com" target="_blank" rel="noreferrer noopener"><%= image_tag "freeclimb_logo.png",alt:"FreeClimb Logo" %></a>
       </div>
     </div>
   </section>
@@ -88,7 +88,7 @@
         <%= image_tag "seneca.png",alt:"Learn To Code", class: "img-fluid", style: "max-width:100%;height:auto" %>
       </div>
       <div class="col-12 col-lg-6">
-        <p>I am excited and grateful to have the opportunity to contribute to the <a href="https://www.senecafoundation.org/">Seneca Foundation</a>. We have a great first cohort and a great team of folks making positive things happen. The Seneca Foundation is continuing to grow and if you happen to be interested please contact me and to discuss in greater detail!
+        <p>I am excited and grateful to have the opportunity to contribute to the <a href="https://www.senecafoundation.org/" target="_blank" rel="noreferrer noopener">Seneca Foundation</a>. We have a great first cohort and a great team of folks making positive things happen. The Seneca Foundation is continuing to grow and if you happen to be interested please contact me and to discuss in greater detail!
         </p>
       </div>
     </div>
@@ -127,7 +127,7 @@
         <p>It would be great to hear from you! Send me a message via the form, I’ll receive a text message, or try out an automated phone experience by calling
         <%= number_to_phone(@contact_phone_number,  area_code: true) %> .
         </p>
-        <p>The messaging and calling automation are both provided by <a href="www.freeclimb.com" alt="FreeClimb">FreeClimb</a></p>
+        <p>The messaging and calling automation are both provided by <a href="www.freeclimb.com" alt="FreeClimb" rel="noreferrer noopener">FreeClimb</a></p>
       </div>
       <div class= "col-12 col-lg-6" data-controller="message">
         <div>
