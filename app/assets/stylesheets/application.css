@@ -44,24 +44,11 @@ footer {
   background-color: #003366;
 }
 
-.sections {
-  background-color: white;
-  color: black;
-  scroll-behavior: smooth;
-}
-
 .workouts {
   color: black;
 }
 
-.separator-row {
-  margin: 50px 0px 50px 0px;
-  padding: 20px 0px 20px 0px;
-  /*background-color: #D4D7DB;*/
-  background-color: #003366;
-  font-style: italic;
-}
-
-.spacer {
-  margin-top: 20px;
+.anchor_offset {
+  padding-top:70px;
+  margin-top: -70px;
 }

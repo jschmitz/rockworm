@@ -6,25 +6,23 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
       <a class="nav-item nav-link" href="#about_me">About Me</a>
-      <a class="nav-item nav-link" href="#projects">Learning</a>
+      <a class="nav-item nav-link" href="#learning">Learning</a>
       <a class="nav-item nav-link" href="#seneca_foundation">Seneca Foundation</a>
       <a class="nav-item nav-link" href="#habits">Habits</a>
       <a class="nav-item nav-link" href="#contact_me">Contact Me</a>
-    </div>
-    <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-      <a target="_blank" href="https://github.com/jschmitz" rel="noreferrer noopener">
+      <a class="nav-item nav-link" target="_blank" href="https://github.com/jschmitz" rel="noreferrer noopener">
         <%= image_tag "Octocat.png", width:"32", height:"32", alt:"Github Logo"%>
       </a>
-      <a target="_blank" href="https://twitter.com/jakeschmitz" rel="noreferrer noopener">
+      <a class="nav-item nav-link" target="_blank" href="https://twitter.com/jakeschmitz" rel="noreferrer noopener">
         <%= image_tag "twitter.svg", width:"32", height:"32", alt:"Twitter Logo"%>
       </a>
-      <a target="_blank" href="https://www.goodreads.com/user/show/18015802-jake-schmitz" rel="noreferrer noopener">
+      <a class="nav-item nav-link" target="_blank" href="https://www.goodreads.com/user/show/18015802-jake-schmitz" rel="noreferrer noopener">
         <%= image_tag "goodreads.png", width:"32", height:"32", alt:"Goodreads Logo"%>
       </a>
-      <a target="_blank" href="https://www.linkedin.com/in/jake-schmitz-745b3b1/" rel="noreferrer noopener">
+      <a class="nav-item nav-link" target="_blank" href="https://www.linkedin.com/in/jake-schmitz-745b3b1/" rel="noreferrer noopener">
         <%= image_tag "linkedin.png", width:"32", height:"32", alt:"LinkedIn Logo" %>
       </a>
-      <a target="_blank" href="https://www.jakeschmitz.com/blog" rel="noreferrer noopener">
+      <a class="nav-item nav-link" target="_blank" href="https://www.jakeschmitz.com/blog" rel="noreferrer noopener">
         <%= image_tag "blog.png", width:"32", height:"32", alt:"Blog Logo" %>
       </a>
     </div>
@@ -40,109 +38,96 @@
 </div>
 
 <div class="container-fluid sections">
-  <section id="about_me">
-    <h2 id="about_me">About Me</h1>
-    <div class="row">
-      <div class= "col-12 col-xl-6">
-        <%= image_tag "about_collage.jpg", alt:"About Me Collage", class:"img-fluid ", style:"min-width:25em; max-width:75%; height: auto" %>
-      </div>
-      <div class= "col-12 col-xl-6">
-        <p>Hi, I'm Jake Schmitz. Dad. Husband. Leader. Software Developer.</p>
-        <p>The software industry has provided a tremendous career over the last 20 plus years and I am grateful for the different roles I’ve had the opportunity to experience. My main focus is to build great teams that build great software.</p>
-        </p>
-        <p>
-        The last ten plus years I have had the opportunity to learn and grow at <a href="https://www.vailsys.com" rel="noreferrer noopener" target="_blank" alt="Vail Systems">Vail Systems</a> with a terrific team of people. I'm grateful for the challenges we have to solve and for the tremendous collaboration and continuous learning required to meet those challenges.
-        </p>
-      </div>
+  <div class="row mt-5 ml-1">
+    <h2 id="about_me" class="anchor_offset">About Me</h1>
+  </div>
+  <div class="row">
+    <div class= "col-12 col-xl-6">
+      <%= image_tag "about_collage.jpg", alt:"About Me Collage", class:"img-fluid ", style: "max-width:100%;height:auto" %>
     </div>
-  </section>
+    <div class= "col-12 col-xl-6">
+      <p>Hi, I'm Jake Schmitz. Dad. Husband. Leader. Software Developer.</p>
+      <p>The software industry has provided a tremendous career over the last 20 plus years and I am grateful for the different roles I’ve had the opportunity to experience. My main focus is to build great teams that build great software.</p>
+      </p>
+      <p>
+      The last ten plus years I have had the opportunity to learn and grow at <a href="https://www.vailsys.com" rel="noreferrer noopener" target="_blank" alt="Vail Systems">Vail Systems</a> with a terrific team of people. I'm grateful for the challenges we have to solve and for the tremendous collaboration and continuous learning required to meet those challenges.
+      </p>
+    </div>
+  </div>
 
-  <section class="separator-row text-center">
-    <h1>Lifelong Learning</h1>
-  </section>
+  <div class="row mt-5 ml-1">
+    <h2 id="learning" class="anchor_offset">Lifelong Learning</h1>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <p>In elementary school I had a Trapper Keeper and the lead page had a picture and the title Lifelong Learning. I'm still going with the mantra thirty years later! I’ve found it very fulfilling to continuously learn by reading books, watching videos and then applying or sharing those learnings.
+      </p>
+      <p>
+      The pandemic year has provided a good opportunity to learn a great deal and develop the new habits to continue for the long run! This year I’ve been able to build this site, start a blog and put energy into several side projects related <a href="https://www.freeclimb.com" target="_blank" rel="noreferrer noopener" alt="FreeClimb">FreeClimb</a>.
+      </p>
+    </div>
+    <div class="col-12 col-lg-6">
+      <a href="www.freeclimb.com" target="_blank" rel="noreferrer noopener"><%= image_tag "freeclimb_logo.png",alt:"FreeClimb Logo", style: "max-width:100%;height:auto" %></a>
+    </div>
+  </div>
 
-  <section id="projects">
+  <div class="row mt-5 ml-1">
+    <h2 id="seneca_foundation" class="anchor_offset">Pay It Forward</h1>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <%= image_tag "seneca.png",alt:"Learn To Code", class: "img-fluid", style: "max-width:100%;height:auto" %>
+    </div>
+    <div class="col-12 col-lg-6">
+      <p>I am excited and grateful to have the opportunity to contribute to the <a href="https://www.senecafoundation.org/" target="_blank" rel="noreferrer noopener">Seneca Foundation</a>. We have a great first cohort and a great team of folks making positive things happen. The Seneca Foundation is continuing to grow and if you happen to be interested please contact me and to discuss in greater detail!
+      </p>
+    </div>
+  </div>
+
+  <div class="row mt-5 ml-1">
+    <h2 id="habits" class="anchor_offset">Habits Drive Outcomes</h2>
+  </div>
+  <div class="workouts">
     <div class="row">
       <div class="col-12 col-lg-6">
-        <h2 id="projects">Learning</h1>
-        <p>In elementary school I had a Trapper Keeper and the lead page had a picture and the title Lifelong Learning. I'm still going with the mantra thirty years later! I’ve found it very fulfilling to continuously learn by reading books, watching videos and then applying or sharing those learnings.
+        <p>I’ve become a bit of a habits advocate… maybe more than a bit. The Slight Edge and several other books got me started down the habits path and Atomic Habits (best read of 2020!) really got me going. The idea of small daily events compounding over time is very compelling and I’ve always enjoyed the process more than any “big” final event.
+         </p>
+         <p>The heatmap displayed provides a bit of social pressure and visualization to keep me on track with my workouts. I’ve found consistent exercise helps my sleep and energy so this one habit I pay extra attention to. If you see me slipping, shoot me a message!
         </p>
-        <p>
-        The pandemic year has provided a good opportunity to learn a great deal and develop the new habits to continue for the long run! This year I’ve been able to build this site, start a blog and put energy into several side projects related <a href="https://www.freeclimb.com" target="_blank" rel="noreferrer noopener" alt="FreeClimb">FreeClimb</a>.
-        </p>
+        <%=link_to "Workouts", workout_logs_path %>
       </div>
       <div class="col-12 col-lg-6">
-        <a href="www.freeclimb.com" target="_blank" rel="noreferrer noopener"><%= image_tag "freeclimb_logo.png",alt:"FreeClimb Logo" %></a>
+        <div id="my_dataviz"></div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="separator-row text-center">
-    <h1>Pay it Forward</h1>
-  </section>
-
-  <section id="seneca_foundation">
-    <h2 >Seneca Foundation</h1>
-    <div class="row">
-      <div class="col-12 col-lg-6">
-        <%= image_tag "seneca.png",alt:"Learn To Code", class: "img-fluid", style: "max-width:100%;height:auto" %>
-      </div>
-      <div class="col-12 col-lg-6">
-        <p>I am excited and grateful to have the opportunity to contribute to the <a href="https://www.senecafoundation.org/" target="_blank" rel="noreferrer noopener">Seneca Foundation</a>. We have a great first cohort and a great team of folks making positive things happen. The Seneca Foundation is continuing to grow and if you happen to be interested please contact me and to discuss in greater detail!
-        </p>
-      </div>
+  <div class="row mt-5 ml-1">
+    <h2 id="contact_me" class="anchor_offset">Contact Me</h1>
+  </div>
+  <div class="row">
+    <div class= "col-12 col-lg-6">
+      <p>It would be great to hear from you! Send me a message via the form, I’ll receive a text message, or try out an automated phone experience by calling
+      <%= number_to_phone(@contact_phone_number,  area_code: true) %> .
+      </p>
+      <p>The messaging and calling automation are both provided by <a href="www.freeclimb.com" alt="FreeClimb" rel="noreferrer noopener">FreeClimb</a></p>
     </div>
-  </section>
-
-  <section class="separator-row text-center">
-    <h1>Habits Drive Outcomes</h1>
-  </section>
-
-  <section id="habits">
-    <div class="workouts">
-      <h2>Habits</h2>
-      <div class="row">
-        <div class="col-12 col-lg-6">
-          <p>I’ve become a bit of a habits advocate… maybe more than a bit. The Slight Edge and several other books got me started down the habits path and Atomic Habits (best read of 2020!) really got me going. The idea of small daily events compounding over time is very compelling and I’ve always enjoyed the process more than any “big” final event.
-           </p>
-           <p>The heatmap displayed provides a bit of social pressure and visualization to keep me on track with my workouts. I’ve found consistent exercise helps my sleep and energy so this one habit I pay extra attention to. If you see me slipping, shoot me a message!
-          </p>
-          <%=link_to "Workouts", workout_logs_path %>
-        </div>
-        <div class="col-12 col-lg-6">
-          <div id="my_dataviz"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="separator-row text-center">
-    <h1>Communication is Key</h1>
-  </section>
-
-  <section id="about_me">
-    <h2 id="contact_me">Contact Me</h1>
-    <div class="row">
-      <div class= "col-12 col-lg-6">
-        <p>It would be great to hear from you! Send me a message via the form, I’ll receive a text message, or try out an automated phone experience by calling
-        <%= number_to_phone(@contact_phone_number,  area_code: true) %> .
-        </p>
-        <p>The messaging and calling automation are both provided by <a href="www.freeclimb.com" alt="FreeClimb" rel="noreferrer noopener">FreeClimb</a></p>
-      </div>
-      <div class= "col-12 col-lg-6" data-controller="message">
+    <div class= "col-12 col-lg-6" data-controller="message">
+      <div>
+        <div data-target="message.result"></div>
+        <label class="w-100">
+          Send a Message
+          <textarea class="form-control" data-target="message.content" rows="3" style="min-width: 100%"></textarea>
+        </label>
         <div>
-          <div data-target="message.result"></div>
-          <textarea class="form-control" data-target="message.content" rows="3"></textarea>
-          <div>
-            <button data-action="click->message#send" class="btn btn-primary mb-3 spacer" >Send Message</button>
-          </div>
-        </div>
-        <div >
-          <p>or</p>
-          <p>Call <%= number_to_phone(@contact_phone_number,  area_code: true) %></p>
+          <button data-action="click->message#send" class="btn btn-primary mb-3 spacer" >Send Message</button>
         </div>
       </div>
+      <div >
+        <p>or</p>
+        <p>Call <%= number_to_phone(@contact_phone_number,  area_code: true) %></p>
+      </div>
     </div>
-  </section>
+  </div>
 </div>
 

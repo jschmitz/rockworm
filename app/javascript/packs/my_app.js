@@ -2,10 +2,9 @@ import * as d3 from "d3"
 import getWeek from 'date-fns/getWeek'
 
 export function paint() {
-  // set the dimensions and margins of the graph
   var margin = {top: 30, right: 30, bottom: 30, left: 70},
-    width = 450 - margin.left - margin.right,
-    height = 450 - margin.top - margin.bottom;
+    width = graphWidth() - margin.left - margin.right,
+    height = graphWidth() - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
   var svg = d3.select("#my_dataviz")
@@ -119,3 +118,8 @@ export function paint() {
 document.addEventListener("turbolinks:load", function() {
   paint();
 });
+
+function graphWidth(){
+  const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+  return Math.min(vw-20,450)
+}
