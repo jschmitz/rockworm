@@ -1,9 +1,8 @@
 name: CD
-on: 
+on:
   push:
     branches:
       - main
-      - push_to_dockerhub
 
 jobs:
   verify:
@@ -24,7 +23,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    steps:        
+    steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
@@ -58,7 +57,6 @@ jobs:
 
           RAILS_ENV: test
         run: rake
-        
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -87,7 +85,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |            
+          script: |
             docker pull jschmitz/rockworm_web:latest
             cd /usr/local/src/rockworm
             docker-compose down
