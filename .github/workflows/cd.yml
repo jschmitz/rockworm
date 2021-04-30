@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - push_to_dockerhub
 
 jobs:
   verify:
@@ -23,7 +24,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    steps:
+    steps:        
       - uses: actions/checkout@v1
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
@@ -42,10 +43,6 @@ jobs:
       - name: Setup test database
         env:
           RAILS_ENV: test
-          #PGHOST: localhost
-          #POSTGRES_DB: rockworm_test
-          #POSTGRES_USER: rockworm_tester
-          #POSTGRES_PASSWORD: postgres
           ROCKWORM_DB_HOST: localhost
           ROCKWORM_DB_USER: rockworm_tester
           ROCKWORM_DB_PASSWORD: postgres
@@ -54,8 +51,6 @@ jobs:
           rake db:create db:migrate
       - name: Run tests
         env:
-          #PGHOST: localhost
-          #PGPORT: ${{ job.services.postgres.ports[5432] }}
           ROCKWORM_DB_HOST: localhost
           ROCKWORM_DB_USER: rockworm_tester
           ROCKWORM_DB_PASSWORD: postgres
@@ -63,3 +58,37 @@ jobs:
 
           RAILS_ENV: test
         run: rake
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/rockworm_web:latest
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Deploy docker image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |            
+            docker pull jschmitz/rockworm_web:latest
+            cd /usr/local/src/rockworm
+            docker-compose down
+            docker-compose up -d
