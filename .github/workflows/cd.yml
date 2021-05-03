@@ -72,11 +72,12 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
           context: ./
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/rockworm_web:latest
+          secrets: |
+            "SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }}"
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
