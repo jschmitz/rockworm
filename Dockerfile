@@ -22,6 +22,6 @@ RUN yarn install --check-files
 
 RUN echo "Oh dang look at that $SECRET_KEY_BASE"
 
-RUN RAILS_ENV=production SECRET_KEY_BASE=$SECRET_KEY_BASE rake assets:precompile --trace
+RUN RAILS_ENV=production SECRET_KEY_BASE=rake secret rake assets:precompile --trace
 CMD ["rails", "server", "-b", "0.0.0.0"]
 
