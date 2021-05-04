@@ -20,8 +20,6 @@ RUN npm -v
 RUN npm install -g yarn
 RUN yarn install --check-files
 
-RUN echo "Oh dang look at that $SECRET_KEY_BASE"
-
 RUN SECRET_KEY_BASE=1 RAILS_ENV=production rake assets:precompile
 CMD ["rails", "server", "-b", "0.0.0.0"]
 
