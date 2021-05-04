@@ -3,13 +3,26 @@ on:
   push:
     branches:
       - main
-      - update_cd
 
 jobs:
   verify:
     name: Build
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: rockworm_tester
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: rockworm_test
+
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
@@ -19,7 +32,31 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: 10.13.0
+          node-version: 14.5.0
+      - name: Install dependencies
+        run: |
+          sudo apt-get -yqq install libpq-dev build-essential libcurl4-openssl-dev
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          yarn install
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          ROCKWORM_DB_HOST: localhost
+          ROCKWORM_DB_USER: rockworm_tester
+          ROCKWORM_DB_PASSWORD: postgres
+          ROCKWORM_DB_DATABASE: rockworm_test
+        run: |
+          rake db:create db:migrate
+      - name: Run tests
+        env:
+          ROCKWORM_DB_HOST: localhost
+          ROCKWORM_DB_USER: rockworm_tester
+          ROCKWORM_DB_PASSWORD: postgres
+          ROCKWORM_DB_DATABASE: rockworm_test
+
+          RAILS_ENV: test
+        run: rake
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -38,8 +75,18 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/rockworm_web:latest
-          secrets: |
-            "SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }}"
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Deploy docker image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            docker pull jschmitz/rockworm_web:latest
+            cd /usr/local/src/rockworm
+            docker-compose down
+            docker-compose up -d
