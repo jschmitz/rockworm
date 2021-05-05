@@ -14,16 +14,12 @@ RUN bundle check || bundle install
 
 COPY . .
 
-#RUN mkdir -p /usr/local/nvm
-#RUN apt-get install -y nodejs
-#RUN apt-get install -y npm
-
 RUN node -v
 RUN npm -v
 
 RUN npm install -g yarn
 RUN yarn install --check-files
 
-RUN RAILS_ENV=production rake assets:precompile --trace
+RUN SECRET_KEY_BASE=1 RAILS_ENV=production rake assets:precompile
 CMD ["rails", "server", "-b", "0.0.0.0"]
 
